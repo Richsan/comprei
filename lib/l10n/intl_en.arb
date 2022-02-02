@@ -1,0 +1,32 @@
+{
+  "@@locale": "en",
+  "helloWorld": "Hello World!",
+  "invalidCredentials": "Invalid Credentials!",
+  "userName": "User Name",
+  "password": "Password",
+  "loginButton": "Login",
+  "signInButton": "Sign in",
+  "registrationScreenTitle": "Create your account",
+  "registerButton": "Register",
+  "databaseDirectory": "Pick a folder where your account data file will be saved",
+  "invalidPassword": "Invalid Password",
+  "invalidUsername": "Invalid user name",
+  "okButton": "OK",
+  "insertByQRCode": "Insert by QR code",
+  "insertOptionsScreenTitle": "Insert New Purchase",
+  "insertPurchaseScreenTitle": "Insert New Purchase",
+  "accountCreatedSuccessfully": "Account successfully created!",
+  "saveButton": "Salvar",
+  "merchantID": "Merchant ID",
+  "tax": "Tax",
+  "total": "Total",
+  "discount": "Discount",
+  "date": "Date",
+  "invalidQRCode": "Invalid QR code!",
+  "qrCodeDetected": "QR code has been detected!",
+  "purchaseRetrieved": "Purchase retrieved!",
+  "scanCode": "Scan a QR code!",
+  "@helloWorld": {
+    "description": "The conventional newborn programmer greeting"
+  }
+}
