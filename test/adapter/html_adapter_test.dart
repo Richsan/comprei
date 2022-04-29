@@ -9,10 +9,12 @@ import 'package:comprei/models/purchase.dart';
 
 void main() {
   final htmlDocStr = File('test/resources/nfe.html').readAsStringSync();
+  final googleImageshtmlDocStr =
+      File('test/resources/google_search2.html').readAsStringSync();
   final htmlDoc = html.parse(htmlDocStr);
 
   group('Testing the nfe extractor', () {
-    test('Extracto to a Purchase correctly', () {
+    test('Extract to a Purchase correctly', () {
       final expectedItems = [
         const PurchaseItem(
           value: 11,
@@ -78,6 +80,16 @@ void main() {
       );
 
       expect(htmlDoc.toPurchase(), expectedPurchase);
+    });
+  });
+
+  group('Testing the google image extractor', () {
+    test('Extract images correctly', () {
+      final regex = RegExp('https?:/(?:/[^/]+)+\\.(?:jpg|gif|png)');
+
+      final r = regex.allMatches(googleImageshtmlDocStr).map((m) => m.group(0));
+
+      print(r);
     });
   });
 }

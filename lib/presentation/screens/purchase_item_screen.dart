@@ -27,6 +27,15 @@ class PurchaseItemScreen extends StatelessWidget {
   }
 
   Widget buildScreen(BuildContext context, PurchaseItem purchase) {
-    return Text('to Implement');
+    return Padding(
+      padding: const EdgeInsets.all(36.0),
+      child: Column(
+        children: [
+          Text(purchase.product.description),
+          Text(purchase.product.brand?.name ?? ''),
+          Text(purchase.product.cod)
+        ],
+      ),
+    );
   }
 }
