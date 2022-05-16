@@ -210,10 +210,10 @@ class S {
     );
   }
 
-  /// `Salvar`
+  /// `Save`
   String get saveButton {
     return Intl.message(
-      'Salvar',
+      'Save',
       name: 'saveButton',
       desc: '',
       args: [],

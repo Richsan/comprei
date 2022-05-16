@@ -1,0 +1,48 @@
+PODS:
+  - Flutter (1.0.0)
+  - FMDB/SQLCipher (2.7.5):
+    - SQLCipher
+  - MTBBarcodeScanner (5.0.11)
+  - qr_code_scanner (0.2.0):
+    - Flutter
+    - MTBBarcodeScanner
+  - sqflite_sqlcipher (0.0.1):
+    - Flutter
+    - FMDB/SQLCipher (~> 2.7.5)
+    - SQLCipher (= 4.4.2)
+  - SQLCipher (4.4.2):
+    - SQLCipher/standard (= 4.4.2)
+  - SQLCipher/common (4.4.2)
+  - SQLCipher/standard (4.4.2):
+    - SQLCipher/common
+
+DEPENDENCIES:
+  - Flutter (from `Flutter`)
+  - qr_code_scanner (from `.symlinks/plugins/qr_code_scanner/ios`)
+  - sqflite_sqlcipher (from `.symlinks/plugins/sqflite_sqlcipher/ios`)
+
+SPEC REPOS:
+  trunk:
+    - FMDB
+    - MTBBarcodeScanner
+    - SQLCipher
+
+EXTERNAL SOURCES:
+  Flutter:
+    :path: Flutter
+  qr_code_scanner:
+    :path: ".symlinks/plugins/qr_code_scanner/ios"
+  sqflite_sqlcipher:
+    :path: ".symlinks/plugins/sqflite_sqlcipher/ios"
+
+SPEC CHECKSUMS:
+  Flutter: 50d75fe2f02b26cc09d224853bb45737f8b3214a
+  FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
+  MTBBarcodeScanner: f453b33c4b7dfe545d8c6484ed744d55671788cb
+  qr_code_scanner: bb67d64904c3b9658ada8c402e8b4d406d5d796e
+  sqflite_sqlcipher: 70eb7fd8d4f0b0352d0bde5cf345b810737f54bb
+  SQLCipher: 1ab0b9486a77d141e72e92ff30681926ed79c07a
+
+PODFILE CHECKSUM: aafe91acc616949ddb318b77800a7f51bffa2a4c
+
+COCOAPODS: 1.11.3

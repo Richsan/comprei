@@ -1,6 +1,6 @@
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
+import 'package:comprei/widgets/inputs.dart';
 import 'package:comprei/widgets/styles.dart';
+import 'package:flutter/material.dart';
 
 class TextAlert extends StatelessWidget {
   const TextAlert({
@@ -9,6 +9,7 @@ class TextAlert extends StatelessWidget {
   }) : super(key: key);
 
   final String message;
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -68,6 +69,88 @@ class CardInfo extends StatelessWidget {
                 ),
             ],
           )),
+    );
+  }
+}
+
+class FullScreenCard extends StatelessWidget {
+  const FullScreenCard({
+    Key? key,
+    required this.children,
+    required this.title,
+    required this.buttonName,
+    required this.buttonOnPressed,
+    this.onClose,
+  }) : super(key: key);
+
+  final List<Widget> children;
+  final String title;
+  final String buttonName;
+  final VoidCallback buttonOnPressed;
+  final VoidCallback? onClose;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(
+        vertical: 20.0,
+        horizontal: 10.0,
+      ),
+      child: Expanded(
+        child: SizedBox(
+          width: double.infinity,
+          child: Card(
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+            elevation: 5,
+            child: Column(
+              children: [
+                Align(
+                  alignment: Alignment.topLeft,
+                  child: IconButton(
+                    onPressed: onClose ?? () => Navigator.of(context).pop(),
+                    icon: const Icon(
+                      Icons.close,
+                      color: Colors.black,
+                    ),
+                  ),
+                ),
+                Align(
+                  alignment: Alignment.topCenter,
+                  child: Text(
+                    title,
+                    style: TextStyle(fontSize: 25),
+                  ),
+                ),
+                const SizedBox(height: 45.0),
+                Expanded(
+                  child: SingleChildScrollView(
+                    child: Column(
+                      // <-- alignments
+                      children: children
+                          .map(
+                            (e) => Padding(
+                              padding: const EdgeInsets.only(bottom: 30),
+                              child: e,
+                            ),
+                          )
+                          .toList(),
+                    ),
+                  ),
+                ),
+                Align(
+                  alignment: Alignment.bottomCenter,
+                  child: ActionButton(
+                    text: buttonName,
+                    onPressed: buttonOnPressed,
+                  ),
+                ),
+                const SizedBox(height: 15.0),
+              ],
+            ),
+          ),
+        ),
+      ),
     );
   }
 }

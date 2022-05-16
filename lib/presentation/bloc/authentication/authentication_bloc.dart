@@ -3,6 +3,7 @@ import 'package:equatable/equatable.dart';
 import 'package:comprei/components/database.dart';
 import 'package:comprei/models/account.dart';
 import 'package:comprei/presentation/screens/login_screen.dart';
+import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
 import 'package:uuid/uuid_util.dart';
 
@@ -35,6 +36,7 @@ class AuthenticationBloc
         whereArgs: [event.userName],
       ).then((value) => value.isNotEmpty ? value.first : null);
 
+
       if (user == null) {
         emit(InvalidCredentials(
             userName: event.userName, password: event.password));
@@ -53,6 +55,8 @@ class AuthenticationBloc
           database: userDb,
         )));
       } catch (error) {
+        print(error);
+
         emit(InvalidCredentials(
             userName: event.userName, password: event.password));
       }

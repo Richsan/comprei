@@ -30,6 +30,7 @@ Future<Database> getDatabase(
         'CREATE TABLE product(cod TEXT PRIMARY KEY, '
         'description TEXT NOT NULL,'
         ' brandid INTEGER NOT NULL,'
+        ' nickname TEXT,'
         ' FOREIGN KEY(brandid) REFERENCES brand(id))',
       );
 

@@ -54,7 +54,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "registerButton": MessageLookupByLibrary.simpleMessage("Register"),
         "registrationScreenTitle":
             MessageLookupByLibrary.simpleMessage("Create your account"),
-        "saveButton": MessageLookupByLibrary.simpleMessage("Salvar"),
+        "saveButton": MessageLookupByLibrary.simpleMessage("Save"),
         "scanCode": MessageLookupByLibrary.simpleMessage("Scan a QR code!"),
         "signInButton": MessageLookupByLibrary.simpleMessage("Sign in"),
         "tax": MessageLookupByLibrary.simpleMessage("Tax"),

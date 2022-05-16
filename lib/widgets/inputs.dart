@@ -36,6 +36,8 @@ class TextInputField extends StatelessWidget {
     this.hintText = 'text',
     this.enabled = true,
     this.errorText,
+    this.initialValue,
+    this.noBorder = false,
     required this.onChanged,
   }) : super(key: key);
 
@@ -44,10 +46,13 @@ class TextInputField extends StatelessWidget {
   final String hintText;
   final bool enabled;
   final String? errorText;
+  final String? initialValue;
+  final bool noBorder;
 
   @override
   Widget build(BuildContext context) {
-    return TextField(
+    return TextFormField(
+      initialValue: initialValue,
       obscureText: false,
       enabled: enabled,
       onChanged: enabled ? onChanged : null,
@@ -56,7 +61,7 @@ class TextInputField extends StatelessWidget {
         contentPadding: padding,
         hintText: hintText,
         errorText: errorText,
-        border: border,
+        border: noBorder? null : border,
       ),
     );
   }

@@ -1,3 +1,4 @@
+import 'package:comprei/presentation/screens/purchase_item_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:comprei/models/purchase.dart';
@@ -66,7 +67,12 @@ class InsertPurchaseScreen extends StatelessWidget {
 
                 return CardInfo(
                   onTap: () {
-                    print(product.cod);
+                    Navigator.of(context).push(
+                      PageRouteBuilder(
+                          opaque: false, // set to false
+                          pageBuilder: (_, __, ___) =>
+                              PurchaseItemScreen(purchase: item)),
+                    );
                   },
                   heading: product.description,
                   subHeading: product.cod,
@@ -77,7 +83,6 @@ class InsertPurchaseScreen extends StatelessWidget {
         ),
         const Divider(),
         summaryFooter(context, state),
-        const SizedBox(height: 25.0),
         Align(
           alignment: Alignment.bottomCenter,
           child: ActionButton(
