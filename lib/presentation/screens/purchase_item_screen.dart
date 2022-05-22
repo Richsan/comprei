@@ -27,7 +27,7 @@ class PurchaseItemScreen extends StatelessWidget {
       buttonName: AppLocalizations.of(context)!.saveButton,
       buttonOnPressed: () => Navigator.of(context).pop(purchase),
       children: [
-        Container(
+        SizedBox(
           height: 150.0,
           child: Ink.image(
             image: const NetworkImage(
@@ -35,29 +35,29 @@ class PurchaseItemScreen extends StatelessWidget {
             fit: BoxFit.scaleDown,
           ),
         ),
-        Text(
-          'Codigo: ${product.cod}',
-          style: textStyle,
+        TextKeyValue(
+          keyName: 'Codigo',
+          value: product.cod,
         ),
-        Text(
-          'Marca: ${product.brand?.name ?? ''}',
-          style: textStyle,
+        TextKeyValue(
+          keyName: 'Marca',
+          value: product.brand?.name ?? '',
         ),
-        Text(
-          'Valor por ${purchase.unitMeasure}: ${purchase.value.asCurrency()}',
-          style: textStyle,
+        TextKeyValue(
+          keyName: 'Valor por ${purchase.unitMeasure}',
+          value: purchase.value.asCurrency(),
         ),
-        Text(
-          'Quantidade: ${purchase.unities} ${purchase.unitMeasure}',
-          style: textStyle,
+        TextKeyValue(
+          keyName: 'Quantidade',
+          value: '${purchase.unities} ${purchase.unitMeasure}',
         ),
-        Text(
-          'Desconto: ${purchase.discount.asCurrency()}',
-          style: textStyle,
+        TextKeyValue(
+          keyName: 'Desconto',
+          value: purchase.discount.asCurrency(),
         ),
-        Text(
-          'Valor Total: ${purchase.totalValue.asCurrency()}',
-          style: textStyle,
+        TextKeyValue(
+          keyName: 'Valor Total',
+          value: purchase.totalValue.asCurrency(),
         ),
       ],
     );

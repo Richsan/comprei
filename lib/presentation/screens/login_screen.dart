@@ -1,9 +1,9 @@
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:comprei/presentation/bloc/authentication/authentication_bloc.dart';
 import 'package:comprei/widgets/inputs.dart';
 import 'package:comprei/widgets/outputs.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class LoginScreen extends StatelessWidget {
@@ -17,6 +17,7 @@ class LoginScreen extends StatelessWidget {
       builder: (context, state) => Scaffold(
         body: Center(
           child: SingleChildScrollView(
+            reverse: true,
             child: Container(
               color: Colors.white,
               child: Padding(

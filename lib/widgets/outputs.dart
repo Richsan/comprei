@@ -96,60 +96,112 @@ class FullScreenCard extends StatelessWidget {
         vertical: 20.0,
         horizontal: 10.0,
       ),
-      child: Expanded(
-        child: SizedBox(
-          width: double.infinity,
-          child: Card(
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-            elevation: 5,
-            child: Column(
-              children: [
-                Align(
-                  alignment: Alignment.topLeft,
-                  child: IconButton(
-                    onPressed: onClose ?? () => Navigator.of(context).pop(),
-                    icon: const Icon(
-                      Icons.close,
-                      color: Colors.black,
-                    ),
+      child: SizedBox(
+        width: double.infinity,
+        child: Card(
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+          elevation: 5,
+          child: Column(
+            children: [
+              Align(
+                alignment: Alignment.topLeft,
+                child: IconButton(
+                  onPressed: onClose ?? () => Navigator.of(context).pop(),
+                  icon: const Icon(
+                    Icons.close,
+                    color: Colors.black,
                   ),
                 ),
-                Align(
-                  alignment: Alignment.topCenter,
-                  child: Text(
-                    title,
-                    style: TextStyle(fontSize: 25),
+              ),
+              Align(
+                alignment: Alignment.topCenter,
+                child: Text(
+                  title,
+                  style: TextStyle(fontSize: 25),
+                ),
+              ),
+              const SizedBox(height: 45.0),
+              Expanded(
+                child: SingleChildScrollView(
+                  child: Column(
+                    // <-- alignments
+                    children: children
+                        .map(
+                          (e) => Padding(
+                            padding: const EdgeInsets.only(bottom: 30),
+                            child: e,
+                          ),
+                        )
+                        .toList(),
                   ),
                 ),
-                const SizedBox(height: 45.0),
-                Expanded(
-                  child: SingleChildScrollView(
-                    child: Column(
-                      // <-- alignments
-                      children: children
-                          .map(
-                            (e) => Padding(
-                              padding: const EdgeInsets.only(bottom: 30),
-                              child: e,
-                            ),
-                          )
-                          .toList(),
-                    ),
-                  ),
+              ),
+              Align(
+                alignment: Alignment.bottomCenter,
+                child: ActionButton(
+                  text: buttonName,
+                  onPressed: buttonOnPressed,
                 ),
-                Align(
-                  alignment: Alignment.bottomCenter,
-                  child: ActionButton(
-                    text: buttonName,
-                    onPressed: buttonOnPressed,
-                  ),
-                ),
-                const SizedBox(height: 15.0),
-              ],
-            ),
+              ),
+              const SizedBox(height: 15.0),
+            ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+class TextKeyValue extends StatelessWidget {
+  const TextKeyValue({
+    Key? key,
+    required this.keyName,
+    required this.value,
+  }) : super(key: key);
+
+  final String keyName;
+  final String value;
+
+  @override
+  Widget build(BuildContext context) {
+    return RichText(
+      text: TextSpan(
+        style: const TextStyle(
+          fontSize: 16.0,
+          color: Colors.black,
+        ),
+        children: <TextSpan>[
+          TextSpan(
+              text: '$keyName: ',
+              style: const TextStyle(fontWeight: FontWeight.bold)),
+          TextSpan(text: value),
+        ],
+      ),
+    );
+  }
+}
+
+class BoldText extends StatelessWidget {
+  const BoldText({
+    Key? key,
+    required this.text,
+  }) : super(key: key);
+
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
+    return RichText(
+      text: TextSpan(
+        style: const TextStyle(
+          fontSize: 16.0,
+          color: Colors.black,
+        ),
+        children: <TextSpan>[
+          TextSpan(
+              text: text, style: const TextStyle(fontWeight: FontWeight.bold)),
+        ],
       ),
     );
   }
