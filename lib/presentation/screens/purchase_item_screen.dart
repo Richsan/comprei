@@ -1,7 +1,10 @@
 import 'package:comprei/adapters/number.dart';
 import 'package:comprei/models/purchase.dart';
+import 'package:comprei/presentation/bloc/purchase_item/purchase_item_bloc.dart';
+import 'package:comprei/widgets/inputs.dart';
 import 'package:comprei/widgets/outputs.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class PurchaseItemScreen extends StatelessWidget {
@@ -13,15 +16,42 @@ class PurchaseItemScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white.withOpacity(0.5),
-      body: buildScreen(context, purchase),
+    return BlocProvider(
+      create: (context) => PurchaseItemBloc(purchase),
+      child: BlocBuilder<PurchaseItemBloc, PurchaseItemState>(
+        builder: (context, state) => Scaffold(
+          backgroundColor: Colors.white.withOpacity(0.5),
+          body: buildScreen(context, state),
+        ),
+      ),
     );
   }
 
-  Widget buildScreen(BuildContext context, PurchaseItem purchase) {
-    final product = purchase.product;
-    const textStyle = TextStyle(fontSize: 20);
+  //TODO make a function to build the edit form screen
+  Widget buildEditScreen(BuildContext context, EditingPurchaseItemState state) {
+    final product = state.purchaseItem.product;
+    return FullScreenCard(
+      title: product.description,
+      buttonName: 'Editar',
+      buttonOnPressed: () => BlocProvider.of<PurchaseItemBloc>(context).add(
+        UpdatePurchaseItem(purchaseItem: state.purchaseItem),
+      ),
+      children: [
+        TextInputField(
+          onChanged: (value) {
+            BlocProvider.of<PurchaseItemBloc>(context).add(
+              //TODO change to construct a new purchaseItem with copy method
+              EditPurchaseItem(purchaseItem: state.purchaseItem),
+            );
+          },
+          hintText: 'nick',
+        ),
+      ],
+    );
+  }
+
+  Widget buildInfoScreen(BuildContext context, PurchaseItemState state) {
+    final product = state.purchaseItem.product;
     return FullScreenCard(
       title: product.description,
       buttonName: AppLocalizations.of(context)!.saveButton,
@@ -45,21 +75,30 @@ class PurchaseItemScreen extends StatelessWidget {
         ),
         TextKeyValue(
           keyName: 'Valor por ${purchase.unitMeasure}',
-          value: purchase.value.asCurrency(),
+          value: state.purchaseItem.value.asCurrency(),
         ),
         TextKeyValue(
           keyName: 'Quantidade',
-          value: '${purchase.unities} ${purchase.unitMeasure}',
+          value: '${state.purchaseItem.unities} ${purchase.unitMeasure}',
         ),
         TextKeyValue(
           keyName: 'Desconto',
-          value: purchase.discount.asCurrency(),
+          value: state.purchaseItem.discount.asCurrency(),
         ),
         TextKeyValue(
           keyName: 'Valor Total',
-          value: purchase.totalValue.asCurrency(),
+          value: state.purchaseItem.totalValue.asCurrency(),
         ),
       ],
     );
+  }
+
+  Widget buildScreen(BuildContext context, PurchaseItemState state) {
+    if (state is NewPurchaseItemState || state is UpdatedPurchaseItemState) {
+      return buildInfoScreen(context, state);
+    } else if (state is EditingPurchaseItemState) {
+      return buildEditScreen(context, state);
+    }
+    throw Exception('screen not implemented for state=${state}');
   }
 }
