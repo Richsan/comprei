@@ -1,9 +1,10 @@
 import 'dart:io';
 
+import 'package:comprei/widgets/styles.dart';
 import 'package:filesystem_picker/filesystem_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:comprei/widgets/styles.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:path_provider/path_provider.dart';
 
 class PasswordField extends StatelessWidget {
   const PasswordField({
@@ -14,6 +15,7 @@ class PasswordField extends StatelessWidget {
 
   final Function(String) onChanged;
   final String? errorText;
+
   @override
   Widget build(BuildContext context) {
     return TextField(
@@ -61,7 +63,7 @@ class TextInputField extends StatelessWidget {
         contentPadding: padding,
         hintText: hintText,
         errorText: errorText,
-        border: noBorder? null : border,
+        border: noBorder ? null : border,
       ),
     );
   }
@@ -154,10 +156,14 @@ class DirectoryPickerButton extends StatelessWidget {
           OutlinedButton.icon(
               icon: const Icon(Icons.folder),
               onPressed: () async {
+                String dir = Platform.isAndroid
+                    ? '/storage/emulated/0/'
+                    : (await getApplicationDocumentsDirectory()).path;
+
                 String? pathChosen = await FilesystemPicker.open(
                   title: 'Save to folder',
                   context: context,
-                  rootDirectory: Directory('/storage/emulated/0/'),
+                  rootDirectory: Directory(dir),
                   fsType: FilesystemType.folder,
                   pickText: 'Save file to this folder',
                   folderIconColor: Colors.teal,
