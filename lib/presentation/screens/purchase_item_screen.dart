@@ -56,6 +56,7 @@ class PurchaseItemScreen extends StatelessWidget {
       title: product.description,
       buttonName: AppLocalizations.of(context)!.saveButton,
       buttonOnPressed: () => Navigator.of(context).pop(purchase),
+      onEdit: () {},
       children: [
         SizedBox(
           height: 150.0,

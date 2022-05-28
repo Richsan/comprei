@@ -180,3 +180,34 @@ class DirectoryPickerButton extends StatelessWidget {
     );
   }
 }
+
+class IconicButton extends StatelessWidget {
+  const IconicButton({
+    Key? key,
+    required this.icon,
+    required this.onPressed,
+    this.label,
+    this.tooltip,
+  }) : super(key: key);
+
+  final IconData icon;
+  final String? label;
+  final String? tooltip;
+  final VoidCallback onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    final textWidget = label != null ? [Text(label!)] : [];
+
+    return Column(
+      children: [
+        IconButton(
+          icon: Icon(icon),
+          tooltip: tooltip,
+          onPressed: onPressed,
+        ),
+        ...textWidget
+      ],
+    );
+  }
+}

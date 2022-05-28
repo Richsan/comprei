@@ -81,6 +81,7 @@ class FullScreenCard extends StatelessWidget {
     required this.buttonName,
     required this.buttonOnPressed,
     this.onClose,
+    this.onEdit,
   }) : super(key: key);
 
   final List<Widget> children;
@@ -88,6 +89,40 @@ class FullScreenCard extends StatelessWidget {
   final String buttonName;
   final VoidCallback buttonOnPressed;
   final VoidCallback? onClose;
+  final VoidCallback? onEdit;
+
+  Widget buildHeaderButtons(BuildContext context) {
+    final editWidget = onEdit != null
+        ? [
+            Align(
+              alignment: Alignment.topRight,
+              child: IconicButton(
+                icon: Icons.edit,
+                onPressed: onEdit!,
+              ),
+            )
+          ]
+        : [];
+
+    final closeButton = Align(
+      alignment: Alignment.topLeft,
+      child: IconButton(
+        onPressed: onClose ?? () => Navigator.of(context).pop(),
+        icon: const Icon(
+          Icons.close,
+          color: Colors.black,
+        ),
+      ),
+    );
+
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        closeButton,
+        ...editWidget,
+      ],
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -104,16 +139,7 @@ class FullScreenCard extends StatelessWidget {
           elevation: 5,
           child: Column(
             children: [
-              Align(
-                alignment: Alignment.topLeft,
-                child: IconButton(
-                  onPressed: onClose ?? () => Navigator.of(context).pop(),
-                  icon: const Icon(
-                    Icons.close,
-                    color: Colors.black,
-                  ),
-                ),
-              ),
+              buildHeaderButtons(context),
               Align(
                 alignment: Alignment.topCenter,
                 child: Text(
@@ -121,7 +147,7 @@ class FullScreenCard extends StatelessWidget {
                   style: TextStyle(fontSize: 25),
                 ),
               ),
-              const SizedBox(height: 45.0),
+              const SizedBox(height: 35.0),
               Expanded(
                 child: SingleChildScrollView(
                   child: Column(
