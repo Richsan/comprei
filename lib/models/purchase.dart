@@ -1,6 +1,5 @@
-import 'package:comprei/models/product.dart';
 import 'package:collection/collection.dart';
-import '../adapters/number.dart';
+import 'package:comprei/models/product.dart';
 import 'package:equatable/equatable.dart';
 
 class Purchase extends Equatable {
@@ -79,6 +78,22 @@ class PurchaseItem extends Equatable {
   final int discount;
   final double unities;
   final String unitMeasure;
+
+  PurchaseItem copyWith({
+    Product? product,
+    int? value,
+    int? discount,
+    double? unities,
+    String? unitMeasure,
+  }) {
+    return PurchaseItem(
+      product: product ?? this.product,
+      value: value ?? this.value,
+      discount: discount ?? this.discount,
+      unities: unities ?? this.unities,
+      unitMeasure: unitMeasure ?? this.unitMeasure,
+    );
+  }
 
   int get totalValue => ((value * unities) - discount).round().toInt();
 

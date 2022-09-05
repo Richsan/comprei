@@ -12,7 +12,20 @@ class PurchaseItemBloc extends Bloc<PurchaseItemEvent, PurchaseItemState> {
         emit(NewPurchaseItemState(purchaseItem: event.purchaseItem)));
     on<UpdatePurchaseItem>((event, emit) =>
         emit(UpdatedPurchaseItemState(purchaseItem: event.purchaseItem)));
-    on<EditPurchaseItem>((event, emit) =>
-        emit(EditingPurchaseItemState(purchaseItem: event.purchaseItem)));
+    on<EditPurchaseItem>(
+      (event, emit) {
+        final eventPurchaseItem = event.purchaseItem;
+        final eventProduct = eventPurchaseItem.product;
+        return emit(
+          EditingPurchaseItemState(
+            purchaseItem: eventPurchaseItem.copyWith(
+              product: eventProduct.copyWith(
+                nickName: event.productNickName,
+              ),
+            ),
+          ),
+        );
+      },
+    );
   }
 }

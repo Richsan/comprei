@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:comprei/adapters/input_masks.dart';
 import 'package:comprei/widgets/styles.dart';
 import 'package:filesystem_picker/filesystem_picker.dart';
 import 'package:flutter/material.dart';
@@ -40,6 +41,7 @@ class TextInputField extends StatelessWidget {
     this.errorText,
     this.initialValue,
     this.noBorder = false,
+    this.mask,
     required this.onChanged,
   }) : super(key: key);
 
@@ -50,12 +52,15 @@ class TextInputField extends StatelessWidget {
   final String? errorText;
   final String? initialValue;
   final bool noBorder;
+  final Mask? mask;
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
       initialValue: initialValue,
+      keyboardType: mask?.keyboardType,
       obscureText: false,
+      inputFormatters: mask != null ? [mask!.formatter] : [],
       enabled: enabled,
       onChanged: enabled ? onChanged : null,
       style: style,

@@ -1,3 +1,4 @@
+import 'package:comprei/adapters/input_masks.dart';
 import 'package:comprei/adapters/number.dart';
 import 'package:comprei/models/purchase.dart';
 import 'package:comprei/presentation/bloc/purchase_item/purchase_item_bloc.dart';
@@ -38,13 +39,31 @@ class PurchaseItemScreen extends StatelessWidget {
       ),
       children: [
         TextInputField(
+          mask: masks["alphabetic"],
           onChanged: (value) {
             BlocProvider.of<PurchaseItemBloc>(context).add(
               //TODO change to construct a new purchaseItem with copy method
-              EditPurchaseItem(purchaseItem: state.purchaseItem),
+              EditPurchaseItem(
+                purchaseItem: state.purchaseItem,
+                productNickName: value,
+              ),
             );
           },
-          hintText: 'nick',
+          hintText: 'Product nick name',
+        ),
+        TextInputField(
+          initialValue: state.purchaseItem.value.asCurrency(),
+          onChanged: (value) {
+            BlocProvider.of<PurchaseItemBloc>(context).add(
+              //TODO change to construct a new purchaseItem with copy method
+              EditPurchaseItem(
+                purchaseItem: state.purchaseItem,
+                productNickName: value,
+              ),
+            );
+          },
+          hintText: 'value',
+          mask: masks["currency"],
         ),
       ],
     );
@@ -56,7 +75,9 @@ class PurchaseItemScreen extends StatelessWidget {
       title: product.description,
       buttonName: AppLocalizations.of(context)!.saveButton,
       buttonOnPressed: () => Navigator.of(context).pop(purchase),
-      onEdit: () {},
+      onEdit: () => BlocProvider.of<PurchaseItemBloc>(context).add(
+        EditPurchaseItem(purchaseItem: state.purchaseItem),
+      ),
       children: [
         SizedBox(
           height: 150.0,

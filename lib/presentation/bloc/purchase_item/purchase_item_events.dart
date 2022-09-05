@@ -2,7 +2,7 @@ part of 'purchase_item_bloc.dart';
 
 abstract class PurchaseItemEvent extends Equatable {
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [];
 }
 
 class NewPurchaseItem extends PurchaseItemEvent {
@@ -24,10 +24,14 @@ class UpdatePurchaseItem extends PurchaseItemEvent {
 }
 
 class EditPurchaseItem extends PurchaseItemEvent {
-  EditPurchaseItem({required this.purchaseItem});
+  EditPurchaseItem({
+    required this.purchaseItem,
+    this.productNickName,
+  });
 
+  final String? productNickName;
   final PurchaseItem purchaseItem;
 
   @override
-  List<Object> get props => [purchaseItem];
+  List<Object?> get props => [productNickName, purchaseItem];
 }
