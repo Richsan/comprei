@@ -43,6 +43,10 @@ final masks = {
     formatter: FilteringTextInputFormatter.allow(RegExp('[0-9]')),
     keyboardType: TextInputType.number,
   ),
+  "decimal": Mask(
+    formatter: FilteringTextInputFormatter.allow(RegExp('[0-9.]')),
+    keyboardType: TextInputType.number,
+  ),
   "alphanumeric": Mask(
     formatter: FilteringTextInputFormatter.allow(RegExp('[0-9a-zA-Z\\s]')),
   ),

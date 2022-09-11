@@ -27,11 +27,23 @@ class EditPurchaseItem extends PurchaseItemEvent {
   EditPurchaseItem({
     required this.purchaseItem,
     this.productNickName,
+    this.productValue,
+    this.productDiscount,
+    this.productUnities,
   });
 
   final String? productNickName;
+  final int? productValue;
+  final int? productDiscount;
+  final double? productUnities;
   final PurchaseItem purchaseItem;
 
   @override
-  List<Object?> get props => [productNickName, purchaseItem];
+  List<Object?> get props => [
+        purchaseItem,
+        productNickName,
+        productValue,
+        productDiscount,
+        productUnities,
+      ];
 }

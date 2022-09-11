@@ -1,5 +1,6 @@
 import 'package:comprei/adapters/input_masks.dart';
 import 'package:comprei/adapters/number.dart';
+import 'package:comprei/adapters/string.dart';
 import 'package:comprei/models/purchase.dart';
 import 'package:comprei/presentation/bloc/purchase_item/purchase_item_bloc.dart';
 import 'package:comprei/widgets/inputs.dart';
@@ -28,7 +29,6 @@ class PurchaseItemScreen extends StatelessWidget {
     );
   }
 
-  //TODO make a function to build the edit form screen
   Widget buildEditScreen(BuildContext context, EditingPurchaseItemState state) {
     final product = state.purchaseItem.product;
     return FullScreenCard(
@@ -42,28 +42,52 @@ class PurchaseItemScreen extends StatelessWidget {
           mask: masks["alphabetic"],
           onChanged: (value) {
             BlocProvider.of<PurchaseItemBloc>(context).add(
-              //TODO change to construct a new purchaseItem with copy method
               EditPurchaseItem(
                 purchaseItem: state.purchaseItem,
                 productNickName: value,
               ),
             );
           },
-          hintText: 'Product nick name',
+          labelText: 'Product nick name',
         ),
         TextInputField(
           initialValue: state.purchaseItem.value.asCurrency(),
           onChanged: (value) {
             BlocProvider.of<PurchaseItemBloc>(context).add(
-              //TODO change to construct a new purchaseItem with copy method
               EditPurchaseItem(
                 purchaseItem: state.purchaseItem,
-                productNickName: value,
+                productValue: int.parse(value.onlyNumbers()),
               ),
             );
           },
-          hintText: 'value',
+          labelText: 'value',
           mask: masks["currency"],
+        ),
+        TextInputField(
+          initialValue: state.purchaseItem.discount.asCurrency(),
+          onChanged: (discountValue) {
+            BlocProvider.of<PurchaseItemBloc>(context).add(
+              EditPurchaseItem(
+                purchaseItem: state.purchaseItem,
+                productDiscount: int.parse(discountValue.onlyNumbers()),
+              ),
+            );
+          },
+          labelText: 'discount',
+          mask: masks["currency"],
+        ),
+        TextInputField(
+          initialValue: state.purchaseItem.unities.toString(),
+          onChanged: (value) {
+            BlocProvider.of<PurchaseItemBloc>(context).add(
+              EditPurchaseItem(
+                purchaseItem: state.purchaseItem,
+                productUnities: double.parse(value),
+              ),
+            );
+          },
+          labelText: 'unities',
+          mask: masks["decimal"],
         ),
       ],
     );
@@ -72,9 +96,9 @@ class PurchaseItemScreen extends StatelessWidget {
   Widget buildInfoScreen(BuildContext context, PurchaseItemState state) {
     final product = state.purchaseItem.product;
     return FullScreenCard(
-      title: product.description,
+      title: product.nickName ?? product.description,
       buttonName: AppLocalizations.of(context)!.saveButton,
-      buttonOnPressed: () => Navigator.of(context).pop(purchase),
+      buttonOnPressed: () => Navigator.of(context).pop(state.purchaseItem),
       onEdit: () => BlocProvider.of<PurchaseItemBloc>(context).add(
         EditPurchaseItem(purchaseItem: state.purchaseItem),
       ),

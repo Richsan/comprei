@@ -56,20 +56,22 @@ class PasswordField extends StatelessWidget {
 class TextInputField extends StatelessWidget {
   const TextInputField({
     Key? key,
-    this.hintText = 'text',
+    this.hintText,
     this.enabled = true,
     this.errorText,
     this.initialValue,
     this.noBorder = false,
     this.mask,
+    this.labelText,
     required this.onChanged,
   }) : super(key: key);
 
   final Function(String) onChanged;
 
-  final String hintText;
+  final String? hintText;
   final bool enabled;
   final String? errorText;
+  final String? labelText;
   final String? initialValue;
   final bool noBorder;
   final Mask? mask;
@@ -87,6 +89,7 @@ class TextInputField extends StatelessWidget {
       decoration: InputDecoration(
         contentPadding: padding,
         hintText: hintText,
+        labelText: labelText,
         errorText: errorText,
         border: noBorder ? null : border,
       ),

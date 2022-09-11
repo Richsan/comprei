@@ -22,6 +22,9 @@ class PurchaseItemBloc extends Bloc<PurchaseItemEvent, PurchaseItemState> {
               product: eventProduct.copyWith(
                 nickName: event.productNickName,
               ),
+              discount: event.productDiscount,
+              unities: event.productUnities,
+              value: event.productValue,
             ),
           ),
         );
