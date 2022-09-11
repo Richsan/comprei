@@ -2,8 +2,6 @@ import 'package:comprei/adapters/number.dart';
 import 'package:comprei/adapters/string.dart';
 import 'package:flutter/services.dart';
 
-final t = FilteringTextInputFormatter.allow(RegExp("[0-9]"));
-
 class _CurrencyInputFormatter extends TextInputFormatter {
   @override
   TextEditingValue formatEditUpdate(

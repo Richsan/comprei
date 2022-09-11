@@ -4,8 +4,15 @@ import 'package:comprei/adapters/input_masks.dart';
 import 'package:comprei/widgets/styles.dart';
 import 'package:filesystem_picker/filesystem_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:path_provider/path_provider.dart';
+
+class _PasswordFieldCubit extends Cubit<bool> {
+  _PasswordFieldCubit({bool obscureText = true}) : super(obscureText);
+
+  void toggleVisibility() => emit(!state);
+}
 
 class PasswordField extends StatelessWidget {
   const PasswordField({
@@ -19,15 +26,28 @@ class PasswordField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TextField(
-      obscureText: true,
-      onChanged: onChanged,
-      style: style,
-      decoration: InputDecoration(
-        contentPadding: padding,
-        hintText: AppLocalizations.of(context)!.password,
-        errorText: errorText,
-        border: border,
+    return BlocProvider(
+      create: (context) => _PasswordFieldCubit(),
+      child: BlocBuilder<_PasswordFieldCubit, bool>(
+        builder: (context, obscureText) => TextField(
+          obscureText: obscureText,
+          onChanged: onChanged,
+          style: style,
+          decoration: InputDecoration(
+            contentPadding: padding,
+            hintText: AppLocalizations.of(context)!.password,
+            errorText: errorText,
+            border: border,
+            suffixIcon: IconButton(
+              icon: Icon(
+                obscureText ? Icons.visibility : Icons.visibility_off,
+                color: Theme.of(context).primaryColorDark,
+              ),
+              onPressed: () => BlocProvider.of<_PasswordFieldCubit>(context)
+                  .toggleVisibility(),
+            ),
+          ),
+        ),
       ),
     );
   }
