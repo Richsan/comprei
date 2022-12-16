@@ -68,6 +68,7 @@ class InsertPurchaseScreen extends StatelessWidget {
 
                   return CardInfo(
                     onTap: () {
+                      //TODO: make the item returned change the list
                       Navigator.of(context).push(
                         PageRouteBuilder(
                             opaque: false, // set to false

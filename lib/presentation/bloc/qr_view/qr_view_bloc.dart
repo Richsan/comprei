@@ -1,7 +1,7 @@
 import 'package:bloc/bloc.dart';
-import 'package:equatable/equatable.dart';
 import 'package:comprei/models/purchase.dart';
 import 'package:comprei/services/nfe_extractor.dart';
+import 'package:equatable/equatable.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
 part 'qr_view_events.dart';
@@ -19,7 +19,7 @@ class QRViewBloc extends Bloc<QRViewEvent, QRViewState> {
     on<ScannedData>((event, emit) async {
       event.controller.pauseCamera();
       final Purchase? purchase =
-          await extractFromUrl(event.scanData.code).catchError((_) => null);
+          await extractFromUrl(event.scanData.code!).catchError((_) => null);
 
       if (purchase != null) {
         emit(

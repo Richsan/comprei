@@ -1,6 +1,8 @@
 import 'dart:io';
 
 import 'package:comprei/adapters/input_masks.dart';
+import 'package:comprei/presentation/bloc/inputs/password_field.dart';
+import 'package:comprei/presentation/bloc/inputs/text_field.dart';
 import 'package:comprei/widgets/styles.dart';
 import 'package:filesystem_picker/filesystem_picker.dart';
 import 'package:flutter/material.dart';
@@ -8,44 +10,33 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:path_provider/path_provider.dart';
 
-class _PasswordFieldCubit extends Cubit<bool> {
-  _PasswordFieldCubit({bool obscureText = true}) : super(obscureText);
-
-  void toggleVisibility() => emit(!state);
-}
-
 class PasswordField extends StatelessWidget {
   const PasswordField({
     Key? key,
     this.errorText,
-    required this.onChanged,
   }) : super(key: key);
 
-  final Function(String) onChanged;
   final String? errorText;
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => _PasswordFieldCubit(),
-      child: BlocBuilder<_PasswordFieldCubit, bool>(
-        builder: (context, obscureText) => TextField(
-          obscureText: obscureText,
-          onChanged: onChanged,
-          style: style,
-          decoration: InputDecoration(
-            contentPadding: padding,
-            hintText: AppLocalizations.of(context)!.password,
-            errorText: errorText,
-            border: border,
-            suffixIcon: IconButton(
-              icon: Icon(
-                obscureText ? Icons.visibility : Icons.visibility_off,
-                color: Theme.of(context).primaryColorDark,
-              ),
-              onPressed: () => BlocProvider.of<_PasswordFieldCubit>(context)
-                  .toggleVisibility(),
+    return BlocBuilder<PasswordFieldCubit, PasswordFieldParams>(
+      builder: (newContext, state) => TextField(
+        obscureText: state.obscureText,
+        onChanged: BlocProvider.of<PasswordFieldCubit>(newContext).valueChanged,
+        style: style,
+        decoration: InputDecoration(
+          contentPadding: padding,
+          hintText: AppLocalizations.of(newContext)!.password,
+          errorText: errorText,
+          border: border,
+          suffixIcon: IconButton(
+            icon: Icon(
+              state.obscureText ? Icons.visibility : Icons.visibility_off,
+              color: Theme.of(context).primaryColorDark,
             ),
+            onPressed: BlocProvider.of<PasswordFieldCubit>(newContext)
+                .toggleVisibility,
           ),
         ),
       ),
@@ -59,39 +50,38 @@ class TextInputField extends StatelessWidget {
     this.hintText,
     this.enabled = true,
     this.errorText,
-    this.initialValue,
     this.noBorder = false,
     this.mask,
     this.labelText,
-    required this.onChanged,
   }) : super(key: key);
-
-  final Function(String) onChanged;
 
   final String? hintText;
   final bool enabled;
   final String? errorText;
   final String? labelText;
-  final String? initialValue;
   final bool noBorder;
   final Mask? mask;
 
   @override
   Widget build(BuildContext context) {
-    return TextFormField(
-      initialValue: initialValue,
-      keyboardType: mask?.keyboardType,
-      obscureText: false,
-      inputFormatters: mask != null ? [mask!.formatter] : [],
-      enabled: enabled,
-      onChanged: enabled ? onChanged : null,
-      style: style,
-      decoration: InputDecoration(
-        contentPadding: padding,
-        hintText: hintText,
-        labelText: labelText,
-        errorText: errorText,
-        border: noBorder ? null : border,
+    return BlocBuilder<ITextFieldCubit, String>(
+      builder: (newContext, state) => TextFormField(
+        initialValue: state,
+        keyboardType: mask?.keyboardType,
+        obscureText: false,
+        inputFormatters: mask != null ? [mask!.formatter] : [],
+        enabled: enabled,
+        onChanged: enabled
+            ? BlocProvider.of<ITextFieldCubit>(newContext).valueChanged
+            : null,
+        style: style,
+        decoration: InputDecoration(
+          contentPadding: padding,
+          hintText: hintText,
+          labelText: labelText,
+          errorText: errorText,
+          border: noBorder ? null : border,
+        ),
       ),
     );
   }
