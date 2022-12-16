@@ -26,6 +26,23 @@
   "qrCodeDetected": "QR code detectado!",
   "purchaseRetrieved": "Compra extraída!",
   "scanCode": "Escaneie um QR code!",
+  "editButton": "Editar",
+  "productNicknameHint": "Apelido do produto",
+  "value": "Valor",
+  "unities": "Unidades",
+  "id": "Código",
+  "brand": "Marca",
+  "quantity": "Quantidade",
+  "totalValue": "Valor Total",
+  "valuePerUnit": "Valor por {unit}",
+  "@valuePerUnit": {
+    "placeholders": {
+      "unit": {
+        "type": "String",
+        "example": "kg"
+      }
+    }
+  },
   "@helloWorld": {
     "description": "The conventional newborn programmer greeting"
   }

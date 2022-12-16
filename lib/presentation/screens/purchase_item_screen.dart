@@ -38,75 +38,64 @@ class PurchaseItemScreen extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider<_NickNameInputField>(
-          create: (context) =>
-              _NickNameInputField(
-                initialValue: purchase.product.nickName ?? '',
-              ),
+          create: (context) => _NickNameInputField(
+            initialValue: purchase.product.nickName ?? '',
+          ),
         ),
         BlocProvider<_ValueInputField>(
-          create: (context) =>
-              _ValueInputField(
-                initialValue: purchase.value.asCurrency(),
-              ),
+          create: (context) => _ValueInputField(
+            initialValue: purchase.value.asCurrency(),
+          ),
         ),
         BlocProvider<_DiscountInputField>(
-          create: (context) =>
-              _DiscountInputField(
-                initialValue: purchase.discount.asCurrency(),
-              ),
+          create: (context) => _DiscountInputField(
+            initialValue: purchase.discount.asCurrency(),
+          ),
         ),
         BlocProvider<_UnitiesInputField>(
-          create: (context) =>
-              _UnitiesInputField(
-                initialValue: purchase.unities.toString(),
-              ),
+          create: (context) => _UnitiesInputField(
+            initialValue: purchase.unities.toString(),
+          ),
         ),
         BlocProvider<PurchaseItemBloc>(
             create: (context) => PurchaseItemBloc(purchase)),
       ],
       child: BlocBuilder<PurchaseItemBloc, PurchaseItemState>(
-        builder: (context, state) =>
-            Scaffold(
-              backgroundColor: Colors.white.withOpacity(0.5),
-              body: buildScreen(context, state),
-            ),
+        builder: (context, state) => Scaffold(
+          backgroundColor: Colors.white.withOpacity(0.5),
+          body: buildScreen(context, state),
+        ),
       ),
     );
   }
 
   Widget buildEditScreen(BuildContext context, EditingPurchaseItemState state) {
     final product = state.purchaseItem.product;
-    final ITextFieldCubit nickNameFieldBloc = BlocProvider.of<
-        _NickNameInputField>(context);
-    final ITextFieldCubit valueFieldBloc = BlocProvider.of<_ValueInputField>(
-        context);
-    final ITextFieldCubit discountFieldBloc = BlocProvider.of<
-        _DiscountInputField>(context);
-    final ITextFieldCubit unitiesFieldBloc = BlocProvider.of<
-        _UnitiesInputField>(context);
+    final ITextFieldCubit nickNameFieldBloc =
+        BlocProvider.of<_NickNameInputField>(context);
+    final ITextFieldCubit valueFieldBloc =
+        BlocProvider.of<_ValueInputField>(context);
+    final ITextFieldCubit discountFieldBloc =
+        BlocProvider.of<_DiscountInputField>(context);
+    final ITextFieldCubit unitiesFieldBloc =
+        BlocProvider.of<_UnitiesInputField>(context);
+
+    final l10n = AppLocalizations.of(context)!;
 
     return FullScreenCard(
       title: product.description,
-      buttonName: 'Editar',
+      buttonName: l10n.editButton,
       buttonOnPressed: () {
         final item = state.purchaseItem.copyWith(
             value: int.parse(
-                BlocProvider
-                    .of<_ValueInputField>(context)
-                    .state
-                    .onlyNumbers()),
-            discount: int.parse(BlocProvider
-                .of<_DiscountInputField>(context)
+                BlocProvider.of<_ValueInputField>(context).state.onlyNumbers()),
+            discount: int.parse(BlocProvider.of<_DiscountInputField>(context)
                 .state
                 .onlyNumbers()),
             unities: double.parse(
-                BlocProvider
-                    .of<_UnitiesInputField>(context)
-                    .state),
+                BlocProvider.of<_UnitiesInputField>(context).state),
             product: product.copyWith(
-                nickName: BlocProvider
-                    .of<_NickNameInputField>(context)
-                    .state));
+                nickName: BlocProvider.of<_NickNameInputField>(context).state));
         BlocProvider.of<PurchaseItemBloc>(context)
             .add(UpdatePurchaseItem(purchaseItem: item));
       },
@@ -115,27 +104,27 @@ class PurchaseItemScreen extends StatelessWidget {
           value: nickNameFieldBloc,
           child: TextInputField(
             mask: masks["alphabetic"],
-            labelText: 'Product nick name',
+            labelText: l10n.productNicknameHint,
           ),
         ),
         BlocProvider.value(
           value: valueFieldBloc,
           child: TextInputField(
-            labelText: 'value',
+            labelText: l10n.value,
             mask: masks["currency"],
           ),
         ),
         BlocProvider.value(
           value: discountFieldBloc,
           child: TextInputField(
-            labelText: 'discount',
+            labelText: l10n.discount,
             mask: masks["currency"],
           ),
         ),
         BlocProvider.value(
           value: unitiesFieldBloc,
           child: TextInputField(
-            labelText: 'unities',
+            labelText: l10n.unities,
             mask: masks["decimal"],
           ),
         ),
@@ -145,14 +134,15 @@ class PurchaseItemScreen extends StatelessWidget {
 
   Widget buildInfoScreen(BuildContext context, PurchaseItemState state) {
     final product = state.purchaseItem.product;
+    final l10n = AppLocalizations.of(context)!;
+
     return FullScreenCard(
       title: product.nickName ?? product.description,
       buttonName: AppLocalizations.of(context)!.saveButton,
       buttonOnPressed: () => Navigator.of(context).pop(state.purchaseItem),
-      onEdit: () =>
-          BlocProvider.of<PurchaseItemBloc>(context).add(
-            EditPurchaseItem(purchaseItem: state.purchaseItem),
-          ),
+      onEdit: () => BlocProvider.of<PurchaseItemBloc>(context).add(
+        EditPurchaseItem(purchaseItem: state.purchaseItem),
+      ),
       children: [
         SizedBox(
           height: 150.0,
@@ -163,27 +153,27 @@ class PurchaseItemScreen extends StatelessWidget {
           ),
         ),
         TextKeyValue(
-          keyName: 'Codigo',
+          keyName: l10n.id,
           value: product.cod,
         ),
         TextKeyValue(
-          keyName: 'Marca',
+          keyName: l10n.brand,
           value: product.brand?.name ?? '',
         ),
         TextKeyValue(
-          keyName: 'Valor por ${purchase.unitMeasure}',
+          keyName: l10n.valuePerUnit(purchase.unitMeasure),
           value: state.purchaseItem.value.asCurrency(),
         ),
         TextKeyValue(
-          keyName: 'Quantidade',
+          keyName: l10n.quantity,
           value: '${state.purchaseItem.unities} ${purchase.unitMeasure}',
         ),
         TextKeyValue(
-          keyName: 'Desconto',
+          keyName: l10n.discount,
           value: state.purchaseItem.discount.asCurrency(),
         ),
         TextKeyValue(
-          keyName: 'Valor Total',
+          keyName: l10n.totalValue,
           value: state.purchaseItem.totalValue.asCurrency(),
         ),
       ],

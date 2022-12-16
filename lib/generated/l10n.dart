@@ -309,6 +309,96 @@ class S {
       args: [],
     );
   }
+
+  /// `Edit`
+  String get editButton {
+    return Intl.message(
+      'Edit',
+      name: 'editButton',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Product Nick Name`
+  String get productNicknameHint {
+    return Intl.message(
+      'Product Nick Name',
+      name: 'productNicknameHint',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Value`
+  String get value {
+    return Intl.message(
+      'Value',
+      name: 'value',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Unities`
+  String get unities {
+    return Intl.message(
+      'Unities',
+      name: 'unities',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Id`
+  String get id {
+    return Intl.message(
+      'Id',
+      name: 'id',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `brand`
+  String get brand {
+    return Intl.message(
+      'brand',
+      name: 'brand',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Quantity`
+  String get quantity {
+    return Intl.message(
+      'Quantity',
+      name: 'quantity',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Total Value`
+  String get totalValue {
+    return Intl.message(
+      'Total Value',
+      name: 'totalValue',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Value per {unit}`
+  String valuePerUnit(String unit) {
+    return Intl.message(
+      'Value per $unit',
+      name: 'valuePerUnit',
+      desc: '',
+      args: [unit],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

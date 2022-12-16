@@ -20,15 +20,20 @@ typedef String MessageIfAbsent(String messageStr, List<dynamic> args);
 class MessageLookup extends MessageLookupByLibrary {
   String get localeName => 'en';
 
+  static String m0(unit) => "Value per ${unit}";
+
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
         "accountCreatedSuccessfully": MessageLookupByLibrary.simpleMessage(
             "Account successfully created!"),
+        "brand": MessageLookupByLibrary.simpleMessage("brand"),
         "databaseDirectory": MessageLookupByLibrary.simpleMessage(
             "Pick a folder where your account data file will be saved"),
         "date": MessageLookupByLibrary.simpleMessage("Date"),
         "discount": MessageLookupByLibrary.simpleMessage("Discount"),
+        "editButton": MessageLookupByLibrary.simpleMessage("Edit"),
         "helloWorld": MessageLookupByLibrary.simpleMessage("Hello World!"),
+        "id": MessageLookupByLibrary.simpleMessage("Id"),
         "insertByQRCode":
             MessageLookupByLibrary.simpleMessage("Insert by QR code"),
         "insertOptionsScreenTitle":
@@ -47,10 +52,13 @@ class MessageLookup extends MessageLookupByLibrary {
         "merchantID": MessageLookupByLibrary.simpleMessage("Merchant ID"),
         "okButton": MessageLookupByLibrary.simpleMessage("OK"),
         "password": MessageLookupByLibrary.simpleMessage("Password"),
+        "productNicknameHint":
+            MessageLookupByLibrary.simpleMessage("Product Nick Name"),
         "purchaseRetrieved":
             MessageLookupByLibrary.simpleMessage("Purchase retrieved!"),
         "qrCodeDetected":
             MessageLookupByLibrary.simpleMessage("QR code has been detected!"),
+        "quantity": MessageLookupByLibrary.simpleMessage("Quantity"),
         "registerButton": MessageLookupByLibrary.simpleMessage("Register"),
         "registrationScreenTitle":
             MessageLookupByLibrary.simpleMessage("Create your account"),
@@ -59,6 +67,10 @@ class MessageLookup extends MessageLookupByLibrary {
         "signInButton": MessageLookupByLibrary.simpleMessage("Sign in"),
         "tax": MessageLookupByLibrary.simpleMessage("Tax"),
         "total": MessageLookupByLibrary.simpleMessage("Total"),
-        "userName": MessageLookupByLibrary.simpleMessage("User Name")
+        "totalValue": MessageLookupByLibrary.simpleMessage("Total Value"),
+        "unities": MessageLookupByLibrary.simpleMessage("Unities"),
+        "userName": MessageLookupByLibrary.simpleMessage("User Name"),
+        "value": MessageLookupByLibrary.simpleMessage("Value"),
+        "valuePerUnit": m0
       };
 }
