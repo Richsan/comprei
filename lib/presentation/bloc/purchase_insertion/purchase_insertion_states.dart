@@ -14,15 +14,6 @@ class NewPurchaseState extends PurchaseInsertionState {
   List<Object> get props => [purchase];
 }
 
-class UpdatedPurchaseState extends PurchaseInsertionState {
-  final Purchase purchase;
-
-  UpdatedPurchaseState({required this.purchase});
-
-  @override
-  List<Object> get props => [purchase];
-}
-
 class SavingPurchaseState extends PurchaseInsertionState {
   final Purchase purchase;
 

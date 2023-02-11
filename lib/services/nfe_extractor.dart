@@ -1,11 +1,12 @@
 import 'package:comprei/models/purchase.dart';
-
-import '../logics/nfe_extractor.dart' as logic;
-import 'package:http/http.dart' as http;
 import 'package:html/parser.dart' as html;
+import 'package:http/http.dart' as http;
+
 import '../adapters/html_document.dart';
+import '../logics/nfe_extractor.dart' as logic;
 
 Future<Purchase> extractFromUrl(String urlStr) async {
+  print('url nfe=$urlStr');
   final url = Uri.parse(urlStr);
   if (!logic.isNFeURL(url)) {
     throw Exception("Not Valid url");

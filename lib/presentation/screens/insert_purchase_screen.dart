@@ -67,16 +67,22 @@ class InsertPurchaseScreen extends StatelessWidget {
                   final item = items[index];
 
                   return CardInfo(
-                    onTap: () {
-                      //TODO: make the item returned change the list
-                      Navigator.of(context).push(
+                    onTap: () async {
+                      final purchaseItem = await Navigator.of(context).push(
                         PageRouteBuilder(
                             opaque: false, // set to false
                             pageBuilder: (_, __, ___) =>
                                 PurchaseItemScreen(purchase: item)),
                       );
+
+                      BlocProvider.of<PurchaseInsertionBloc>(context).add(
+                        UpdatePurchaseItem(
+                          purchase: state.purchase,
+                          purchaseItem: purchaseItem,
+                        ),
+                      );
                     },
-                    heading: product.description,
+                    heading: product.nickName ?? product.description,
                     subHeading: product.cod,
                     supportingText:
                         '${item.value.asCurrency()} x ${item.unities} = ${item.totalValue.asCurrency()}',

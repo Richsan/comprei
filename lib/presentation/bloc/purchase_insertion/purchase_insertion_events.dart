@@ -23,6 +23,22 @@ class UpdatePurchase extends PurchaseInsertionEvent {
   List<Object> get props => [purchase];
 }
 
+class UpdatePurchaseItem extends PurchaseInsertionEvent {
+  UpdatePurchaseItem({
+    required this.purchase,
+    required this.purchaseItem,
+  });
+
+  final Purchase purchase;
+  final PurchaseItem purchaseItem;
+
+  @override
+  List<Object> get props => [
+        purchase,
+        purchaseItem,
+      ];
+}
+
 class SavePurchase extends PurchaseInsertionEvent {
   SavePurchase({required this.purchase});
 

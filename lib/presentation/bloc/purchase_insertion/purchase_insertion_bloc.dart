@@ -1,6 +1,6 @@
 import 'package:bloc/bloc.dart';
-import 'package:equatable/equatable.dart';
 import 'package:comprei/models/purchase.dart';
+import 'package:equatable/equatable.dart';
 
 part 'purchase_insertion_events.dart';
 part 'purchase_insertion_states.dart';
@@ -11,8 +11,23 @@ class PurchaseInsertionBloc
       : super(NewPurchaseState(purchase: purchase)) {
     on<NewPurchase>(
         (event, emit) => emit(NewPurchaseState(purchase: event.purchase)));
-    on<UpdatePurchase>(
-        (event, emit) => emit(UpdatedPurchaseState(purchase: event.purchase)));
+    on<UpdatePurchaseItem>((event, emit) async {
+      final purchase = event.purchase;
+      final purchaseItem = event.purchaseItem;
+      final purchaseItems = purchase.items;
+      final newPurchaseItems = purchaseItems
+          .map((e) =>
+              e.product.cod == purchaseItem.product.cod ? purchaseItem : e)
+          .toList();
+
+      emit(
+        NewPurchaseState(
+          purchase: purchase.copyWith(
+            items: newPurchaseItems,
+          ),
+        ),
+      );
+    });
     on<SavePurchase>((event, emit) async {
       emit(SavingPurchaseState(purchase: event.purchase));
 
