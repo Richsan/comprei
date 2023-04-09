@@ -1,13 +1,11 @@
 import 'package:bloc/bloc.dart';
-import 'package:equatable/equatable.dart';
+import 'package:comprei/components/PurchaseRepository.dart';
 import 'package:comprei/components/database.dart';
 import 'package:comprei/models/account.dart';
-import 'package:comprei/presentation/screens/login_screen.dart';
-import 'package:flutter/material.dart';
-import 'package:uuid/uuid.dart';
-import 'package:uuid/uuid_util.dart';
+import 'package:equatable/equatable.dart';
 
 part 'authentication_events.dart';
+
 part 'authentication_states.dart';
 
 class AuthenticationBloc
@@ -15,10 +13,11 @@ class AuthenticationBloc
   AuthenticationBloc() : super(const NotLogged()) {
     on<RequestLoginEvent>((event, emit) => emit(const NotLogged()));
     on<ChangeParameterEvent>(
-      (event, emit) => emit(NotLogged(
-        userName: event.userName,
-        password: event.password,
-      )),
+          (event, emit) =>
+          emit(NotLogged(
+            userName: event.userName,
+            password: event.password,
+          )),
     );
     on<LoginEvent>((event, emit) async {
       emit(
@@ -36,6 +35,7 @@ class AuthenticationBloc
         whereArgs: [event.userName],
       ).then((value) => value.isNotEmpty ? value.first : null);
 
+      print('USER LOGIn = $user');
 
       if (user == null) {
         emit(InvalidCredentials(
@@ -47,13 +47,13 @@ class AuthenticationBloc
         final userDb = await getDatabase(
             event.userName, user['databasepath'] as String, event.password);
 
-        print(await userDb.query('merchant'));
         emit(Logged(
             account: Account(
-          userName: event.userName,
-          id: user['id'] as int,
-          database: userDb,
-        )));
+              userName: event.userName,
+              id: user['id'] as int,
+              database: userDb,
+            ),
+            purchaseRepository: PurchaseRepository(database: userDb)));
       } catch (error) {
         print(error);
 

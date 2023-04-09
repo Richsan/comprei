@@ -210,6 +210,16 @@ class S {
     );
   }
 
+  /// `Purchase successfully saved!`
+  String get purchaseSavedSuccessfully {
+    return Intl.message(
+      'Purchase successfully saved!',
+      name: 'purchaseSavedSuccessfully',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Save`
   String get saveButton {
     return Intl.message(

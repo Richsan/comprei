@@ -1,40 +1,45 @@
 part of 'purchase_insertion_bloc.dart';
 
 abstract class PurchaseInsertionState extends Equatable {
+  const PurchaseInsertionState(this.purchase);
+
+  final Purchase purchase;
+
   @override
-  List<Object> get props => [];
+  List<Object> get props => [purchase];
+
 }
 
 class NewPurchaseState extends PurchaseInsertionState {
-  final Purchase purchase;
 
-  NewPurchaseState({required this.purchase});
+  const NewPurchaseState({required Purchase purchase })
+      : super(purchase);
 
   @override
   List<Object> get props => [purchase];
 }
 
 class SavingPurchaseState extends PurchaseInsertionState {
-  final Purchase purchase;
-
-  SavingPurchaseState({required this.purchase});
+  const SavingPurchaseState({required Purchase purchase})
+      : super(purchase);
 
   @override
   List<Object> get props => [purchase];
 }
 
 class SavedPurchaseState extends PurchaseInsertionState {
-  final Purchase purchase;
 
-  SavedPurchaseState({required this.purchase});
+  const SavedPurchaseState({required Purchase purchase})
+      : super(purchase);
 
   @override
   List<Object> get props => [purchase];
 }
 
 class ErrorState extends PurchaseInsertionState {
-  ErrorState();
+  const ErrorState({required Purchase purchase})
+  : super(purchase);
 
   @override
-  List<Object> get props => [];
+  List<Object> get props => [purchase];
 }

@@ -56,6 +56,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Product Nick Name"),
         "purchaseRetrieved":
             MessageLookupByLibrary.simpleMessage("Purchase retrieved!"),
+        "purchaseSavedSuccessfully": MessageLookupByLibrary.simpleMessage(
+            "Purchase successfully saved!"),
         "qrCodeDetected":
             MessageLookupByLibrary.simpleMessage("QR code has been detected!"),
         "quantity": MessageLookupByLibrary.simpleMessage("Quantity"),

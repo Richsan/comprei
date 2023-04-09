@@ -1,14 +1,27 @@
 import 'package:collection/collection.dart';
 import 'package:comprei/models/product.dart';
 import 'package:equatable/equatable.dart';
+import 'package:uuid/uuid.dart';
+
+enum BuyFrequency {
+  daily,
+  weekly,
+  biweekly,
+  monthly,
+  bimonthly,
+  semiannually,
+  annually,
+}
 
 class Purchase extends Equatable {
   const Purchase({
+    this.id = const Uuid(),
     required this.items,
     required this.merchant,
     required this.date,
     this.taxValue = 0,
     this.discount = 0,
+    this.invoice,
   })  : assert(items != const []),
         assert(discount >= 0);
 
@@ -17,6 +30,8 @@ class Purchase extends Equatable {
   final DateTime date;
   final int discount;
   final int taxValue;
+  final Uuid id;
+  final String? invoice;
 
   int get remainingDiscount => discount - items.map((e) => e.discount).sum;
 
@@ -39,12 +54,25 @@ class Purchase extends Equatable {
 
   @override
   List<Object?> get props => [
+        id,
         merchant,
         items,
         date,
         discount,
         taxValue,
+        invoice,
       ];
+
+  Map<String, dynamic> toMapEntity() {
+    return {
+      'id': id.v4(),
+      'merchant_id': merchant.id,
+      'date_time': date.toIso8601String(),
+      'discount': discount,
+      'tax_value': taxValue,
+      ...(invoice != null ? {'invoice': invoice!} : {})
+    };
+  }
 }
 
 class Merchant extends Equatable {
@@ -60,10 +88,19 @@ class Merchant extends Equatable {
 
   @override
   List<Object?> get props => [id, name, nickName];
+
+  Map<String, dynamic> toMapEntity() {
+    return {
+      'id': id,
+      'name': name,
+      'nickname': nickName,
+    };
+  }
 }
 
 class PurchaseItem extends Equatable {
   const PurchaseItem({
+    this.id = const Uuid(),
     required this.value,
     this.discount = 0,
     required this.product,
@@ -78,6 +115,7 @@ class PurchaseItem extends Equatable {
   final int discount;
   final double unities;
   final String unitMeasure;
+  final Uuid id;
 
   PurchaseItem copyWith({
     Product? product,
@@ -85,6 +123,8 @@ class PurchaseItem extends Equatable {
     int? discount,
     double? unities,
     String? unitMeasure,
+    DateTime? dateTime,
+    Merchant? merchant,
   }) {
     return PurchaseItem(
       product: product ?? this.product,
@@ -105,4 +145,15 @@ class PurchaseItem extends Equatable {
         unities,
         unitMeasure,
       ];
+
+  Map<String, dynamic> toMapEntity() {
+    return {
+      'id': id.v4(),
+      'product_cod': product.cod,
+      'value': value,
+      'discount': discount,
+      'unities': unities,
+      'unit_measure': unitMeasure,
+    };
+  }
 }

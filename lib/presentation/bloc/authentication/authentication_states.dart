@@ -31,13 +31,18 @@ class Logging extends AuthenticationState {
 }
 
 class Logged extends AuthenticationState {
-  const Logged({required this.account});
+  const Logged({
+    required this.account,
+    required this.purchaseRepository,
+  });
 
   final Account account;
+  final PurchaseRepository purchaseRepository;
 
   @override
   List<Object> get props => [
         account,
+        purchaseRepository,
       ];
 }
 

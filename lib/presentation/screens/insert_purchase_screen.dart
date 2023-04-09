@@ -1,5 +1,6 @@
 import 'package:comprei/adapters/number.dart';
 import 'package:comprei/models/purchase.dart';
+import 'package:comprei/presentation/bloc/authentication/authentication_bloc.dart';
 import 'package:comprei/presentation/bloc/purchase_insertion/purchase_insertion_bloc.dart';
 import 'package:comprei/presentation/screens/purchase_item_screen.dart';
 import 'package:comprei/widgets/inputs.dart';
@@ -21,31 +22,41 @@ class InsertPurchaseScreen extends StatelessWidget {
     return BlocProvider(
       create: (context) => PurchaseInsertionBloc(purchase),
       child: BlocBuilder<PurchaseInsertionBloc, PurchaseInsertionState>(
-        builder: (context, state) => Scaffold(
-          appBar: AppBar(
-            leading: IconButton(
-              icon: const Icon(Icons.arrow_back, color: Colors.white),
-              onPressed: () => Navigator.of(context).pop(),
-            ),
-            title:
+        builder: (context, state) =>
+            Scaffold(
+              appBar: AppBar(
+                leading: IconButton(
+                  icon: const Icon(Icons.arrow_back, color: Colors.white),
+                  onPressed: () => Navigator.of(context).pop(),
+                ),
+                title:
                 Text(AppLocalizations.of(context)!.insertPurchaseScreenTitle),
-            centerTitle: true,
-          ),
-          body: buildScreen(context, state),
-        ),
+                centerTitle: true,
+              ),
+              body: buildScreen(context, state),
+            ),
       ),
     );
   }
 
   Widget buildScreen(BuildContext context, PurchaseInsertionState state) {
-    if (state is NewPurchaseState) {
+    if (state is NewPurchaseState || state is SavingPurchaseState) {
       return purchaseScreen(context, state);
+    }
+
+    if (state is SavedPurchaseState) {
+      return insertedPurchaseScreen(context);
     }
 
     return errorScreen(context);
   }
 
-  Widget purchaseScreen(BuildContext context, NewPurchaseState state) {
+  Widget purchaseScreen(BuildContext context, PurchaseInsertionState state) {
+    final Logged session =
+    BlocProvider
+        .of<AuthenticationBloc>(context)
+        .state as Logged;
+
     final items = state.purchase.items;
     return SingleChildScrollView(
       child: Container(
@@ -85,7 +96,8 @@ class InsertPurchaseScreen extends StatelessWidget {
                     heading: product.nickName ?? product.description,
                     subHeading: product.cod,
                     supportingText:
-                        '${item.value.asCurrency()} x ${item.unities} = ${item.totalValue.asCurrency()}',
+                    '${item.value.asCurrency()} x ${item.unities} = ${item
+                        .totalValue.asCurrency()}',
                   );
                 }),
           ),
@@ -95,7 +107,15 @@ class InsertPurchaseScreen extends StatelessWidget {
           Align(
             alignment: Alignment.bottomCenter,
             child: ActionButton(
-              onPressed: () => null,
+              enabled: state is! SavingPurchaseState,
+              isLoading: state is SavingPurchaseState,
+              onPressed: () =>
+                  BlocProvider.of<PurchaseInsertionBloc>(context).add(
+                    SavePurchase(
+                      purchase: purchase,
+                      purchaseRepository: session.purchaseRepository,
+                    ),
+                  ),
               text: AppLocalizations.of(context)!.saveButton,
             ),
           )
@@ -108,7 +128,24 @@ class InsertPurchaseScreen extends StatelessWidget {
     return const Text('Erro');
   }
 
-  Widget header(BuildContext context, NewPurchaseState state) {
+  Widget insertedPurchaseScreen(BuildContext context) =>
+      SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(36.0),
+          child: Column(
+            children: [
+              Text(AppLocalizations.of(context)!.purchaseSavedSuccessfully),
+              const SizedBox(height: 35.0),
+              ActionButton(
+                onPressed: () => Navigator.pop(context),
+                text: AppLocalizations.of(context)!.okButton,
+              )
+            ],
+          ),
+        ),
+      );
+
+  Widget header(BuildContext context, PurchaseInsertionState state) {
     final merchant = state.purchase.merchant;
     final purchase = state.purchase;
 
@@ -127,7 +164,7 @@ class InsertPurchaseScreen extends StatelessWidget {
     );
   }
 
-  Widget summaryFooter(BuildContext context, NewPurchaseState state) {
+  Widget summaryFooter(BuildContext context, PurchaseInsertionState state) {
     final purchase = state.purchase;
 
     return Align(

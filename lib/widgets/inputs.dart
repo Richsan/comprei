@@ -154,46 +154,52 @@ class LinkButton extends StatelessWidget {
   }
 }
 
-class DirectoryPickerButton extends StatelessWidget {
-  DirectoryPickerButton({
-    required this.onPressed,
-    required this.label,
-    this.path = '',
-  });
+class DirectoryPickerCubit extends Cubit<String> with ITextFieldCubit {
+  DirectoryPickerCubit({String initialValue = ''}) : super(initialValue);
+}
 
-  final String path;
+class DirectoryPickerButton extends StatelessWidget {
+  const DirectoryPickerButton({
+    Key? key,
+    required this.label,
+  }) : super(key: key);
+
   final String label;
-  final Function(String?) onPressed;
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: padding,
-      child: Column(
-        children: [
-          OutlinedButton.icon(
-              icon: const Icon(Icons.folder),
-              onPressed: () async {
-                String dir = Platform.isAndroid
-                    ? '/storage/emulated/0/'
-                    : (await getApplicationDocumentsDirectory()).path;
+    return BlocBuilder<DirectoryPickerCubit, String>(
+      builder: (newContext, state) => Padding(
+        padding: padding,
+        child: Column(
+          children: [
+            OutlinedButton.icon(
+                icon: const Icon(Icons.folder),
+                onPressed: () async {
+                  String dir = Platform.isAndroid
+                      ? '/storage/emulated/0/'
+                      : (await getApplicationDocumentsDirectory()).path;
 
-                String? pathChosen = await FilesystemPicker.open(
-                  title: 'Save to folder',
-                  context: context,
-                  rootDirectory: Directory(dir),
-                  fsType: FilesystemType.folder,
-                  pickText: 'Save file to this folder',
-                  folderIconColor: Colors.teal,
-                );
-                onPressed(pathChosen);
-              },
-              label: Text(label),
-              style: OutlinedButton.styleFrom(
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20.0)))),
-          Text(path),
-        ],
+                  String pathChosen = await FilesystemPicker.open(
+                        title: 'Save to folder',
+                        context: context,
+                        rootDirectory: Directory(dir),
+                        fsType: FilesystemType.folder,
+                        pickText: 'Save file to this folder',
+                        folderIconColor: Colors.teal,
+                      ) ??
+                      '';
+
+                  BlocProvider.of<DirectoryPickerCubit>(newContext)
+                      .valueChanged(pathChosen);
+                },
+                label: Text(label),
+                style: OutlinedButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20.0)))),
+            Text(state),
+          ],
+        ),
       ),
     );
   }

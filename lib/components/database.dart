@@ -1,6 +1,13 @@
+import 'package:path/path.dart';
 import 'package:sqflite_sqlcipher/sqflite.dart';
 import 'package:sqflite_sqlcipher/sqlite_api.dart';
-import 'package:path/path.dart';
+
+const String merchantTableName = 'merchant';
+const String brandTableName = "brand";
+const String productTableName = "product";
+const String purchaseItemTableName = "purchase_item";
+const String purchaseTableName = "purchase";
+const String purchasePurchaseItemsTableName = "purchase_purchase_items";
 
 Future<Database> getDatabase(
     String user, String databasePath, String password) async {
@@ -9,59 +16,59 @@ Future<Database> getDatabase(
 
   final path = join(databasePath, databaseFileName);
 
+  print('user=$user | path=$path | filename=$databaseFileName');
+
   return await openDatabase(
     path,
     password: password,
     singleInstance: false,
     onCreate: (db, version) async {
       await db.execute(
-        'CREATE TABLE merchant(id TEXT PRIMARY KEY,'
+        'CREATE TABLE $merchantTableName(id TEXT PRIMARY KEY,'
         ' name TEXT NOT NULL,'
         ' nickname TEXT)',
       );
 
       await db.execute(
-        'CREATE TABLE brand(id INTEGER PRIMARY KEY AUTOINCREMENT,'
+        'CREATE TABLE $brandTableName(id TEXT PRIMARY KEY,'
         ' name TEXT NOT NULL,'
         ' nickname TEXT)',
       );
 
       await db.execute(
-        'CREATE TABLE product(cod TEXT PRIMARY KEY, '
-        'description TEXT NOT NULL,'
-        ' brandid INTEGER NOT NULL,'
+        'CREATE TABLE $productTableName(cod TEXT PRIMARY KEY, '
+        ' description TEXT NOT NULL,'
+        ' brand_id TEXT,'
         ' nickname TEXT,'
-        ' FOREIGN KEY(brandid) REFERENCES brand(id))',
+        ' buy_frequency INTEGER,'
+        ' FOREIGN KEY(brand_id) REFERENCES $brandTableName(id))',
       );
 
       await db.execute(
-        'CREATE TABLE purchase_item('
-        'id INTEGER PRIMARY KEY AUTOINCREMENT,'
-        ' productcod TEXT NOT NULL,'
+        'CREATE TABLE $purchaseTableName('
+        ' id TEXT PRIMARY KEY,'
+        ' invoice TEXT UNIQUE,'
+        ' merchant_id TEXT NOT NULL,'
+        ' tax_value INTEGER NOT NULL,'
+        ' discount INTEGER NOT NULL,'
+        ' date_time TEXT NOT NULL,'
+        ' FOREIGN KEY(merchant_id) REFERENCES $merchantTableName(id))',
+      );
+
+      await db.execute(
+        'CREATE TABLE $purchaseItemTableName('
+        ' id TEXT PRIMARY KEY,'
+        ' product_cod TEXT NOT NULL,'
         ' value INTEGER NOT NULL,'
         ' discount INTEGER NOT NULL,'
         ' unities INTEGER NOT NULL,'
-        ' unitmeasure VARCHAR(10) NOT NULL,'
-        ' FOREIGN KEY(productcod) REFERENCES product(cod))',
-      );
-
-      await db.execute(
-        'CREATE TABLE purchase('
-        'id INTEGER PRIMARY KEY AUTOINCREMENT,'
-        ' merchantid TEXT NOT NULL,'
-        ' taxvalue INTEGER NOT NULL,'
-        ' discount INTEGER NOT NULL,'
-        ' datetime TEXT NOT NULL,'
-        ' FOREIGN KEY(merchantid) REFERENCES merchant(id))',
-      );
-
-      await db.execute(
-        'CREATE TABLE purchase_purchase_items('
-        ' purchaseid INTEGER NOT NULL,'
-        ' purchaseitemid INTEGER NOT NULL,'
-        ' FOREIGN KEY(purchaseid) REFERENCES purchase(id),'
-        ' FOREIGN KEY(purchaseitemid) REFERENCES purchase_item(id),'
-        ' PRIMARY KEY (purchaseid, purchaseitemid))',
+        ' unit_measure VARCHAR(10) NOT NULL,'
+        ' date_time TEXT NOT NULL,'
+        ' merchant_id TEXT NOT NULL,'
+        ' purchase_id TEXT NOT NULL,'
+        ' FOREIGN KEY(product_cod) REFERENCES $productTableName(cod),'
+        ' FOREIGN KEY(purchase_id) REFERENCES $purchaseTableName(id),'
+        ' FOREIGN KEY(merchant_id) REFERENCES $merchantTableName(id))',
       );
     },
     version: 1,

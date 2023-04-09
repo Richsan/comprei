@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:uuid/uuid.dart';
 
 class Product extends Equatable {
   const Product({
@@ -32,16 +33,33 @@ class Product extends Equatable {
         nickName,
         brand,
       ];
+
+  Map<String, dynamic> toMapEntity() {
+    if (brand?.id != null) {
+      return {
+        'cod': cod,
+        'description': description,
+        'nickName': nickName,
+        'brand_id': brand!.id
+      };
+    } else {
+      return {
+        'cod': cod,
+        'description': description,
+        'nickName': nickName,
+      };
+    }
+  }
 }
 
 class Brand extends Equatable {
   const Brand({
-    required this.id,
+    this.id = const Uuid(),
     required this.name,
     this.nickName,
   });
 
-  final int id;
+  final Uuid id;
   final String name;
   final String? nickName;
 
@@ -60,5 +78,29 @@ class Brand extends Equatable {
         id,
         name,
         nickName,
+      ];
+
+  Map<String, dynamic> toMapEntity() {
+    return {
+      'id': id.v4(),
+      'name': name,
+      'nickname': nickName,
+    };
+  }
+}
+
+class ProductPurchases extends Equatable {
+  const ProductPurchases({
+    required this.product,
+    required this.purchasesDate,
+  });
+
+  final Product product;
+  final List<DateTime> purchasesDate;
+
+  @override
+  List<Object> get props => [
+        product,
+        purchasesDate,
       ];
 }

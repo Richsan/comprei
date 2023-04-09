@@ -13,3 +13,15 @@ extension MoneyExtractor on double {
     return (this * 100).round().toInt();
   }
 }
+
+extension Statistics on List<num> {
+  num perc95() {
+    final copy = List<num>.from(this);
+
+    copy.sort();
+
+    final percIdx = (copy.length * 0.95).round();
+
+    return copy[percIdx - 1];
+  }
+}

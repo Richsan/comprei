@@ -16,6 +16,7 @@
   "insertOptionsScreenTitle": "Insert New Purchase",
   "insertPurchaseScreenTitle": "Insert New Purchase",
   "accountCreatedSuccessfully": "Account successfully created!",
+  "purchaseSavedSuccessfully": "Purchase successfully saved!",
   "saveButton": "Save",
   "merchantID": "Merchant ID",
   "tax": "Tax",

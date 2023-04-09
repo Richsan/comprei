@@ -40,9 +40,13 @@ class UpdatePurchaseItem extends PurchaseInsertionEvent {
 }
 
 class SavePurchase extends PurchaseInsertionEvent {
-  SavePurchase({required this.purchase});
+  SavePurchase({
+    required this.purchase,
+    required this.purchaseRepository,
+  });
 
   final Purchase purchase;
+  final PurchaseRepository purchaseRepository;
 
   @override
   List<Object> get props => [purchase];

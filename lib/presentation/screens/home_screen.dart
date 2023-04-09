@@ -1,16 +1,17 @@
+import 'package:comprei/presentation/bloc/authentication/authentication_bloc.dart';
 import 'package:flutter/material.dart';
-import 'package:comprei/models/account.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({
     Key? key,
-    required this.account,
   }) : super(key: key);
 
-  final Account account;
   @override
   Widget build(BuildContext context) {
+    final Logged session =
+        BlocProvider.of<AuthenticationBloc>(context).state as Logged;
+    final account = session.account;
     return Scaffold(
       appBar: AppBar(
         title: Text(account.userName),

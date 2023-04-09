@@ -19,5 +19,5 @@ Future<Purchase> extractFromUrl(String urlStr) async {
         'Error requesting url status-code=${urlResponse.statusCode} body=${urlResponse.body}');
   }
 
-  return html.parse(urlResponse.body).toPurchase();
+  return html.parse(urlResponse.body).toPurchase(url: urlStr);
 }

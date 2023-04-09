@@ -18,6 +18,7 @@ class QRViewBloc extends Bloc<QRViewEvent, QRViewState> {
     );
     on<ScannedData>((event, emit) async {
       event.controller.pauseCamera();
+      //TODO: check in the database if we already imported this url
       final Purchase? purchase =
           await extractFromUrl(event.scanData.code!).catchError((_) => null);
 

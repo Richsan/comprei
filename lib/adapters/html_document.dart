@@ -1,10 +1,11 @@
-import 'package:html/dom.dart';
 import 'package:comprei/models/product.dart';
 import 'package:comprei/models/purchase.dart';
+import 'package:html/dom.dart';
+
 import 'string.dart';
 
 extension HtmlDocumentAdapter on Document {
-  Purchase toPurchase() {
+  Purchase toPurchase({String? url}) {
     final content = getElementById('conteudo');
     final totalSection = getElementById('totalNota');
     final infoSection = getElementById('infos');
@@ -79,6 +80,7 @@ extension HtmlDocumentAdapter on Document {
         [];
 
     return Purchase(
+        invoice: url,
         items: items,
         merchant: Merchant(
           id: merchantId ?? "unkown",

@@ -12,7 +12,8 @@ abstract class RegistrationState extends Equatable {
   final String databasePath;
 
   @override
-  List<Object> get props => [
+  List<Object> get props =>
+      [
         userName,
         password,
         databasePath,
@@ -25,10 +26,10 @@ class CreatingAccount extends RegistrationState {
     String password = '',
     String databasePath = '',
   }) : super(
-          userName: userName,
-          password: password,
-          databasePath: databasePath,
-        );
+    userName: userName,
+    password: password,
+    databasePath: databasePath,
+  );
 }
 
 class RequestRegistration extends RegistrationState {
@@ -37,21 +38,17 @@ class RequestRegistration extends RegistrationState {
     required String password,
     required String databasePath,
   }) : super(
-          userName: userName,
-          password: password,
-          databasePath: databasePath,
-        );
+    userName: userName,
+    password: password,
+    databasePath: databasePath,
+  );
 }
 
 class CreatedAccount extends RegistrationState {
-  const CreatedAccount({required this.account});
-
-  final Account account;
+  const CreatedAccount();
 
   @override
-  List<Object> get props => [
-        account,
-      ];
+  List<Object> get props => [];
 }
 
 class InvalidRegistration extends RegistrationState {
@@ -63,17 +60,18 @@ class InvalidRegistration extends RegistrationState {
     this.isValidUserName = true,
     this.isValidDatabasePath = true,
   }) : super(
-          userName: userName,
-          password: password,
-          databasePath: databasePath,
-        );
+    userName: userName,
+    password: password,
+    databasePath: databasePath,
+  );
 
   final bool isValidUserName;
   final bool isValidPassword;
   final bool isValidDatabasePath;
 
   @override
-  List<Object> get props => [
+  List<Object> get props =>
+      [
         isValidUserName,
         isValidPassword,
         isValidDatabasePath,

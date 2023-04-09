@@ -12,6 +12,7 @@
   "invalidPassword": "Senha inválida!",
   "invalidUsername": "Nome de usuário inválido!",
   "accountCreatedSuccessfully": "Conta criada com sucesso!",
+  "purchaseSavedSuccessfully": "Compra cadastrada com sucesso!",
   "okButton": "OK",
   "insertByQRCode": "Inserir por QR code",
   "insertOptionsScreenTitle": "Inserir Compra",

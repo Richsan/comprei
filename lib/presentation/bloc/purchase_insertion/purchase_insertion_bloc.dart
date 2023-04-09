@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:comprei/components/PurchaseRepository.dart';
 import 'package:comprei/models/purchase.dart';
 import 'package:equatable/equatable.dart';
 
@@ -33,6 +34,7 @@ class PurchaseInsertionBloc
 
       //save in database
 
+      await event.purchaseRepository.save(event.purchase);
       //in case of error
       //emit(ErrorState());
 

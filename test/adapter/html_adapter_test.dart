@@ -1,11 +1,10 @@
-import 'package:flutter_test/flutter_test.dart';
-import 'package:comprei/adapters/html_document.dart';
-import 'package:html/parser.dart' as html;
-import 'package:comprei/models/product.dart';
-
 import 'dart:io';
 
+import 'package:comprei/adapters/html_document.dart';
+import 'package:comprei/models/product.dart';
 import 'package:comprei/models/purchase.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:html/parser.dart' as html;
 
 void main() {
   final htmlDocStr = File('test/resources/nfe.html').readAsStringSync();
