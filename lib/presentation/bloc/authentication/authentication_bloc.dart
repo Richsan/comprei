@@ -1,11 +1,10 @@
 import 'package:bloc/bloc.dart';
-import 'package:comprei/components/PurchaseRepository.dart';
 import 'package:comprei/components/database.dart';
+import 'package:comprei/components/purchase_repository.dart';
 import 'package:comprei/models/account.dart';
 import 'package:equatable/equatable.dart';
 
 part 'authentication_events.dart';
-
 part 'authentication_states.dart';
 
 class AuthenticationBloc
@@ -13,11 +12,10 @@ class AuthenticationBloc
   AuthenticationBloc() : super(const NotLogged()) {
     on<RequestLoginEvent>((event, emit) => emit(const NotLogged()));
     on<ChangeParameterEvent>(
-          (event, emit) =>
-          emit(NotLogged(
-            userName: event.userName,
-            password: event.password,
-          )),
+      (event, emit) => emit(NotLogged(
+        userName: event.userName,
+        password: event.password,
+      )),
     );
     on<LoginEvent>((event, emit) async {
       emit(

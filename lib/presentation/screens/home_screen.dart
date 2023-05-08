@@ -1,4 +1,5 @@
 import 'package:comprei/presentation/bloc/authentication/authentication_bloc.dart';
+import 'package:comprei/presentation/screens/purchases_list_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -16,13 +17,8 @@ class HomeScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text(account.userName),
       ),
-      body: ListView.builder(
-        itemCount: 3,
-        itemBuilder: (context, index) => Card(
-          child: ListTile(
-            title: Text('test $index'),
-          ),
-        ),
+      body: PurchasesListWidget(
+        purchaseRepository: session.purchaseRepository,
       ),
       floatingActionButton: FloatingActionButton(
         elevation: 10.0,

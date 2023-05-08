@@ -232,3 +232,26 @@ class BoldText extends StatelessWidget {
     );
   }
 }
+
+class LoadingWidget extends StatelessWidget {
+  const LoadingWidget({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(36),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: const [
+          Text('Loading..'),
+          Center(
+            child: LinearProgressIndicator(
+              semanticsLabel: "loading...",
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}

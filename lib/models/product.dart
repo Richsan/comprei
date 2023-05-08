@@ -33,33 +33,16 @@ class Product extends Equatable {
         nickName,
         brand,
       ];
-
-  Map<String, dynamic> toMapEntity() {
-    if (brand?.id != null) {
-      return {
-        'cod': cod,
-        'description': description,
-        'nickName': nickName,
-        'brand_id': brand!.id
-      };
-    } else {
-      return {
-        'cod': cod,
-        'description': description,
-        'nickName': nickName,
-      };
-    }
-  }
 }
 
 class Brand extends Equatable {
-  const Brand({
-    this.id = const Uuid(),
+  Brand({
+    UuidValue? id,
     required this.name,
     this.nickName,
-  });
+  }) : id = id ?? const Uuid().v4obj();
 
-  final Uuid id;
+  final UuidValue id;
   final String name;
   final String? nickName;
 
@@ -79,14 +62,6 @@ class Brand extends Equatable {
         name,
         nickName,
       ];
-
-  Map<String, dynamic> toMapEntity() {
-    return {
-      'id': id.v4(),
-      'name': name,
-      'nickname': nickName,
-    };
-  }
 }
 
 class ProductPurchases extends Equatable {

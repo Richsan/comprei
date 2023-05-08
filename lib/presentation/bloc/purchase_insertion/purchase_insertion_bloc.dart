@@ -1,5 +1,5 @@
 import 'package:bloc/bloc.dart';
-import 'package:comprei/components/PurchaseRepository.dart';
+import 'package:comprei/components/purchase_repository.dart';
 import 'package:comprei/models/purchase.dart';
 import 'package:equatable/equatable.dart';
 

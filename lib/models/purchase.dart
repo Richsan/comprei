@@ -14,8 +14,8 @@ enum BuyFrequency {
 }
 
 class Purchase extends Equatable {
-  const Purchase({
-    this.id = const Uuid(),
+  Purchase({
+    UuidValue? id,
     required this.items,
     required this.merchant,
     required this.date,
@@ -23,14 +23,15 @@ class Purchase extends Equatable {
     this.discount = 0,
     this.invoice,
   })  : assert(items != const []),
-        assert(discount >= 0);
+        assert(discount >= 0),
+        id = id ?? const Uuid().v4obj();
 
   final Merchant merchant;
   final List<PurchaseItem> items;
   final DateTime date;
   final int discount;
   final int taxValue;
-  final Uuid id;
+  final UuidValue id;
   final String? invoice;
 
   int get remainingDiscount => discount - items.map((e) => e.discount).sum;
@@ -45,6 +46,7 @@ class Purchase extends Equatable {
     int? taxValue,
   }) =>
       Purchase(
+        id: id,
         items: items ?? this.items,
         merchant: merchant ?? this.merchant,
         date: date ?? this.date,
@@ -62,17 +64,6 @@ class Purchase extends Equatable {
         taxValue,
         invoice,
       ];
-
-  Map<String, dynamic> toMapEntity() {
-    return {
-      'id': id.v4(),
-      'merchant_id': merchant.id,
-      'date_time': date.toIso8601String(),
-      'discount': discount,
-      'tax_value': taxValue,
-      ...(invoice != null ? {'invoice': invoice!} : {})
-    };
-  }
 }
 
 class Merchant extends Equatable {
@@ -88,19 +79,11 @@ class Merchant extends Equatable {
 
   @override
   List<Object?> get props => [id, name, nickName];
-
-  Map<String, dynamic> toMapEntity() {
-    return {
-      'id': id,
-      'name': name,
-      'nickname': nickName,
-    };
-  }
 }
 
 class PurchaseItem extends Equatable {
-  const PurchaseItem({
-    this.id = const Uuid(),
+  PurchaseItem({
+    UuidValue? id,
     required this.value,
     this.discount = 0,
     required this.product,
@@ -108,14 +91,15 @@ class PurchaseItem extends Equatable {
     this.unitMeasure = "UN",
   })  : assert(unities > 0),
         assert(discount >= 0),
-        assert(value > 0);
+        assert(value > 0),
+        id = id ?? const Uuid().v4obj();
 
   final Product product;
   final int value;
   final int discount;
   final double unities;
   final String unitMeasure;
-  final Uuid id;
+  final UuidValue id;
 
   PurchaseItem copyWith({
     Product? product,
@@ -127,6 +111,7 @@ class PurchaseItem extends Equatable {
     Merchant? merchant,
   }) {
     return PurchaseItem(
+      id: id,
       product: product ?? this.product,
       value: value ?? this.value,
       discount: discount ?? this.discount,
@@ -145,15 +130,4 @@ class PurchaseItem extends Equatable {
         unities,
         unitMeasure,
       ];
-
-  Map<String, dynamic> toMapEntity() {
-    return {
-      'id': id.v4(),
-      'product_cod': product.cod,
-      'value': value,
-      'discount': discount,
-      'unities': unities,
-      'unit_measure': unitMeasure,
-    };
-  }
 }

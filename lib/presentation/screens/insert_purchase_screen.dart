@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+//TODO: we're gonna need split the view of a purchase from the edition of a purchase
 class InsertPurchaseScreen extends StatelessWidget {
   const InsertPurchaseScreen({
     Key? key,
@@ -22,19 +23,18 @@ class InsertPurchaseScreen extends StatelessWidget {
     return BlocProvider(
       create: (context) => PurchaseInsertionBloc(purchase),
       child: BlocBuilder<PurchaseInsertionBloc, PurchaseInsertionState>(
-        builder: (context, state) =>
-            Scaffold(
-              appBar: AppBar(
-                leading: IconButton(
-                  icon: const Icon(Icons.arrow_back, color: Colors.white),
-                  onPressed: () => Navigator.of(context).pop(),
-                ),
-                title:
-                Text(AppLocalizations.of(context)!.insertPurchaseScreenTitle),
-                centerTitle: true,
-              ),
-              body: buildScreen(context, state),
+        builder: (context, state) => Scaffold(
+          appBar: AppBar(
+            leading: IconButton(
+              icon: const Icon(Icons.arrow_back, color: Colors.white),
+              onPressed: () => Navigator.of(context).pop(),
             ),
+            title:
+                Text(AppLocalizations.of(context)!.insertPurchaseScreenTitle),
+            centerTitle: true,
+          ),
+          body: buildScreen(context, state),
+        ),
       ),
     );
   }
@@ -51,11 +51,10 @@ class InsertPurchaseScreen extends StatelessWidget {
     return errorScreen(context);
   }
 
+  //TODO: maybe transform this in a class?
   Widget purchaseScreen(BuildContext context, PurchaseInsertionState state) {
     final Logged session =
-    BlocProvider
-        .of<AuthenticationBloc>(context)
-        .state as Logged;
+        BlocProvider.of<AuthenticationBloc>(context).state as Logged;
 
     final items = state.purchase.items;
     return SingleChildScrollView(
@@ -96,8 +95,7 @@ class InsertPurchaseScreen extends StatelessWidget {
                     heading: product.nickName ?? product.description,
                     subHeading: product.cod,
                     supportingText:
-                    '${item.value.asCurrency()} x ${item.unities} = ${item
-                        .totalValue.asCurrency()}',
+                        '${item.value.asCurrency()} x ${item.unities} = ${item.totalValue.asCurrency()}',
                   );
                 }),
           ),
@@ -111,11 +109,11 @@ class InsertPurchaseScreen extends StatelessWidget {
               isLoading: state is SavingPurchaseState,
               onPressed: () =>
                   BlocProvider.of<PurchaseInsertionBloc>(context).add(
-                    SavePurchase(
-                      purchase: purchase,
-                      purchaseRepository: session.purchaseRepository,
-                    ),
-                  ),
+                SavePurchase(
+                  purchase: purchase,
+                  purchaseRepository: session.purchaseRepository,
+                ),
+              ),
               text: AppLocalizations.of(context)!.saveButton,
             ),
           )
@@ -128,8 +126,7 @@ class InsertPurchaseScreen extends StatelessWidget {
     return const Text('Erro');
   }
 
-  Widget insertedPurchaseScreen(BuildContext context) =>
-      SingleChildScrollView(
+  Widget insertedPurchaseScreen(BuildContext context) => SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(36.0),
           child: Column(
