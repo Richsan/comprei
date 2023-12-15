@@ -83,7 +83,7 @@ class PurchaseItemScreen extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
 
     return FullScreenCard(
-      title: product.description,
+      title: product.name,
       buttonName: l10n.editButton,
       buttonOnPressed: () {
         final item = state.purchaseItem.copyWith(
@@ -137,7 +137,7 @@ class PurchaseItemScreen extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
 
     return FullScreenCard(
-      title: product.nickName ?? product.description,
+      title: product.nickName ?? product.name,
       buttonName: AppLocalizations.of(context)!.saveButton,
       buttonOnPressed: () => Navigator.of(context).pop(state.purchaseItem),
       onEdit: () => BlocProvider.of<PurchaseItemBloc>(context).add(
@@ -154,7 +154,7 @@ class PurchaseItemScreen extends StatelessWidget {
         ),
         TextKeyValue(
           keyName: l10n.id,
-          value: product.cod,
+          value: product.id.uuid,
         ),
         TextKeyValue(
           keyName: l10n.brand,

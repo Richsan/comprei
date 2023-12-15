@@ -17,11 +17,13 @@ class PurchasesListWidget extends StatelessWidget {
       final purchases = state.purchaseSummaries;
       return ListView.builder(
         itemCount: purchases.length,
+        //TODO: determine all the information displayed here
         itemBuilder: (context, index) => Card(
           child: ListTile(
             title: Text(purchases[index].merchant.nickName ??
                 purchases[index].merchant.name),
-            subtitle: Text(purchases[index].id.toString()),
+            subtitle: Text(
+                '${purchases[index].merchant.taxId}\n${purchases[index].date.toString()}'),
           ),
         ),
       );
@@ -58,6 +60,7 @@ class PurchaseListScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        //TODO: adapt localization
         title: const Text('purchases'),
       ),
       body: PurchasesListWidget(

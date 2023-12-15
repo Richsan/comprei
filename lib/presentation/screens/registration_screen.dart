@@ -19,8 +19,8 @@ class RegistrationScreen extends StatelessWidget {
         BlocProvider<ITextFieldCubit>(
           create: (context) => TextFieldCubit(),
         ),
-        BlocProvider<DirectoryPickerCubit>(
-          create: (context) => DirectoryPickerCubit(),
+        BlocProvider<ContentPickerCubit>(
+          create: (context) => ContentPickerCubit(),
         ),
       ],
       child: BlocBuilder<RegistrationBloc, RegistrationState>(
@@ -68,8 +68,8 @@ class RegistrationScreen extends StatelessWidget {
               ),
               const SizedBox(height: 25.0),
               BlocProvider.value(
-                value: BlocProvider.of<DirectoryPickerCubit>(context),
-                child: DirectoryPickerButton(
+                value: BlocProvider.of<ContentPickerCubit>(context),
+                child: FilePickerButton(
                   label: AppLocalizations.of(context)!.databaseDirectory,
                 ),
               ),
@@ -83,7 +83,7 @@ class RegistrationScreen extends StatelessWidget {
                   password:
                       BlocProvider.of<PasswordFieldCubit>(context).state.value,
                   databasePath:
-                      BlocProvider.of<DirectoryPickerCubit>(context).state,
+                      BlocProvider.of<ContentPickerCubit>(context).state,
                 )),
                 text: AppLocalizations.of(context)!.registerButton,
               )

@@ -17,7 +17,7 @@ class PurchaseRepository {
       Transaction txn, PurchaseItem purchaseItem) async {
     final product = purchaseItem.product;
     final purchases = (await txn.query(purchaseItemTableName,
-            where: 'product_cod = ?', whereArgs: [product.cod]))
+            where: 'product_cod = ?', whereArgs: [product.id]))
         .map((p) => p['purchase_item_date_time'] as String)
         .map(DateTime.parse)
         .toList();
@@ -25,7 +25,7 @@ class PurchaseRepository {
     final buyFrequency = purchases.toDaysDiff().perc95();
 
     await txn.update(productTableName, {'product_buy_frequency': buyFrequency},
-        where: 'product_cod = ?', whereArgs: [product.cod]);
+        where: 'product_cod = ?', whereArgs: [product.id]);
   }
 
   Future<void> save(Purchase purchase) => database.transaction((txn) async {
@@ -65,12 +65,14 @@ class PurchaseRepository {
     return await database
         .rawQuery('SELECT * FROM $purchaseTableName purchase'
             ' JOIN $merchantTableName merchant'
-            ' ON merchant.merchant_id = purchase.merchant_id')
+            ' ON merchant.merchant_id = purchase.merchant_id'
+            ' ORDER BY purchase_date_time DESC')
         .then((rows) => rows
             .map((row) => PurchaseSummary(
                   id: UuidValue(row['purchase_id'] as String),
                   merchant: Merchant(
-                    id: row['merchant_id'] as String,
+                    id: UuidValue(row['merchant_id'] as String),
+                    taxId: row['merchant_tax_id'].toString(),
                     name: row['merchant_name'] as String,
                     nickName: row['merchant_nickname'] as String?,
                   ),
@@ -90,10 +92,13 @@ class PurchaseRepository {
         [purchaseId.uuid]).then((rows) {
       final items = rows
           .map((itemRow) => PurchaseItem(
+                cod: itemRow['purchase_item_cod'] as String,
                 value: itemRow['purchase_item_value'] as int,
+                description: itemRow['purchase_item_description'] as String,
                 product: Product(
-                    cod: itemRow['product_cod'] as String,
-                    description: itemRow['product_description'] as String,
+                    id: UuidValue(itemRow['product_id'] as String),
+                    unitMeasure: itemRow['product_unit_measure'] as String,
+                    name: itemRow['product_name'] as String,
                     nickName: itemRow['product_nickname'] as String?,
                     brand: itemRow['brand_id'] != null
                         ? Brand(
@@ -112,7 +117,8 @@ class PurchaseRepository {
       return Purchase(
         id: UuidValue(rows.first['purchase_id'] as String),
         merchant: Merchant(
-          id: rows.first['merchant_id'] as String,
+          id: UuidValue(rows.first['merchant_id'] as String),
+          taxId: rows.first['merchant_tax_id'] as String,
           name: rows.first['merchant_name'] as String,
           nickName: rows.first['merchant_nickname'] as String?,
         ),

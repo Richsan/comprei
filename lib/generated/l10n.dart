@@ -60,6 +60,16 @@ class S {
     );
   }
 
+  /// `Loading...`
+  String get loadingIndicatorLabel {
+    return Intl.message(
+      'Loading...',
+      name: 'loadingIndicatorLabel',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Invalid Credentials!`
   String get invalidCredentials {
     return Intl.message(

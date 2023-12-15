@@ -5,5 +5,6 @@ import 'presentation/screens/app.dart';
 
 void main() async {
   Permission.manageExternalStorage.request();
+  Permission.storage.request();
   runApp(const App());
 }

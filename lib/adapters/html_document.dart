@@ -69,10 +69,12 @@ extension HtmlDocumentAdapter on Document {
 
           return PurchaseItem(
             value: productValue,
+            description: productDescription,
             product: Product(
-              cod: productCod,
-              description: productDescription,
+              unitMeasure: productUnit,
+              name: productDescription,
             ),
+            cod: productCod,
             unities: double.parse(productUnities),
             unitMeasure: productUnit,
           );
@@ -83,7 +85,7 @@ extension HtmlDocumentAdapter on Document {
         invoice: url,
         items: items,
         merchant: Merchant(
-          id: merchantId ?? "unkown",
+          taxId: merchantId ?? "unkown",
           name: merchantName ?? "unknown",
         ),
         taxValue: int.parse(taxes),

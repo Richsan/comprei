@@ -92,8 +92,8 @@ class InsertPurchaseScreen extends StatelessWidget {
                         ),
                       );
                     },
-                    heading: product.nickName ?? product.description,
-                    subHeading: product.cod,
+                    heading: product.nickName ?? product.name,
+                    subHeading: product.id.uuid,
                     supportingText:
                         '${item.value.asCurrency()} x ${item.unities} = ${item.totalValue.asCurrency()}',
                   );
@@ -151,7 +151,7 @@ class InsertPurchaseScreen extends StatelessWidget {
         BoldText(text: merchant.name),
         TextKeyValue(
           keyName: AppLocalizations.of(context)!.merchantID,
-          value: merchant.id,
+          value: merchant.id.uuid,
         ),
         TextKeyValue(
           keyName: AppLocalizations.of(context)!.date,

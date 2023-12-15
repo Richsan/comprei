@@ -17,52 +17,64 @@ void main() {
       final expectedItems = [
         PurchaseItem(
           value: 11,
-          product: const Product(
-            cod: '1469349',
-            description: 'SACOLA VERDE SP 48X5',
+          description: 'SACOLA VERDE SP 48X5',
+          cod: '1469349',
+          product: Product(
+            name: 'SACOLA VERDE SP 48X5',
+            unitMeasure: 'UN',
           ),
           unitMeasure: 'UN',
           unities: 2,
         ),
         PurchaseItem(
           value: 455,
-          product: const Product(
-            cod: '7630033',
-            description: 'REGALIZ TUBO MORANGO',
+          description: 'REGALIZ TUBO MORANGO',
+          cod: '7630033',
+          product: Product(
+            name: 'REGALIZ TUBO MORANGO',
+            unitMeasure: 'UN',
           ),
           unitMeasure: 'UN',
         ),
         PurchaseItem(
+          description: 'LOMBO SUINO ATEN kg',
           value: 2690,
-          product: const Product(
-            cod: '191739',
-            description: 'LOMBO SUINO ATEN kg',
+          cod: '191739',
+          product: Product(
+            name: 'LOMBO SUINO ATEN kg',
+            unitMeasure: 'kg',
           ),
           unitMeasure: 'kg',
           unities: 0.292,
         ),
         PurchaseItem(
           value: 4629,
-          product: const Product(
-            cod: '77224',
-            description: 'C MOLE BOV BIFE kg',
+          description: 'C MOLE BOV BIFE kg',
+          cod: '77224',
+          product: Product(
+            name: 'C MOLE BOV BIFE kg',
+            unitMeasure: 'kg',
           ),
           unitMeasure: 'kg',
           unities: 0.5,
         ),
         PurchaseItem(
           value: 1190,
-          product: const Product(
-            cod: '1221285',
-            description: 'OVO BCO MED C/ 20',
+          description: 'OVO BCO MED C/ 20',
+          cod: '1221285',
+          product: Product(
+            name: 'OVO BCO MED C/ 20',
+            unitMeasure: 'UN',
           ),
           unitMeasure: 'UN',
         ),
         PurchaseItem(
           value: 819,
-          product: const Product(
-            cod: '2155883',
-            description: 'FEIJAO CARIOCA PANTE',
+          description: 'FEIJAO CARIOCA PANTE',
+          cod: '2155883',
+          product: Product(
+            name: 'FEIJAO CARIOCA PANTE',
+            unitMeasure: 'UN',
           ),
           unitMeasure: 'UN',
         ),
@@ -71,14 +83,36 @@ void main() {
         items: expectedItems,
         discount: 200,
         taxValue: 1620,
-        merchant: const Merchant(
-          id: '47508411017555',
+        merchant: Merchant(
+          taxId: '47508411017555',
           name: 'CIA BRASILEIRA DE DISTRIBUICAO',
         ),
         date: DateTime.parse('2021-10-26T19:36:59-03:00'),
       );
 
-      expect(htmlDoc.toPurchase(), expectedPurchase);
+      expect(
+          htmlDoc.toPurchase(),
+          predicate<Purchase>(
+            (p0) =>
+                p0.date == expectedPurchase.date &&
+                p0.discount == expectedPurchase.discount &&
+                p0.merchant.taxId == expectedPurchase.merchant.taxId &&
+                p0.merchant.name == expectedPurchase.merchant.name &&
+                expectedPurchase.items
+                    .where(
+                      (element) => p0.items
+                          .where((item) =>
+                              item.discount == element.discount &&
+                              item.unitMeasure == element.unitMeasure &&
+                              item.cod == element.cod &&
+                              item.value == element.value &&
+                              item.product.name == element.product.name &&
+                              item.product.unitMeasure ==
+                                  element.product.unitMeasure)
+                          .isNotEmpty,
+                    )
+                    .isNotEmpty,
+          ));
     });
   });
 

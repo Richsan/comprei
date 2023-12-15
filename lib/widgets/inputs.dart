@@ -4,6 +4,7 @@ import 'package:comprei/adapters/input_masks.dart';
 import 'package:comprei/presentation/bloc/inputs/password_field.dart';
 import 'package:comprei/presentation/bloc/inputs/text_field.dart';
 import 'package:comprei/widgets/styles.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:filesystem_picker/filesystem_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -154,8 +155,8 @@ class LinkButton extends StatelessWidget {
   }
 }
 
-class DirectoryPickerCubit extends Cubit<String> with ITextFieldCubit {
-  DirectoryPickerCubit({String initialValue = ''}) : super(initialValue);
+class ContentPickerCubit extends Cubit<String> with ITextFieldCubit {
+  ContentPickerCubit({String initialValue = ''}) : super(initialValue);
 }
 
 class DirectoryPickerButton extends StatelessWidget {
@@ -168,7 +169,7 @@ class DirectoryPickerButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<DirectoryPickerCubit, String>(
+    return BlocBuilder<ContentPickerCubit, String>(
       builder: (newContext, state) => Padding(
         padding: padding,
         child: Column(
@@ -177,7 +178,7 @@ class DirectoryPickerButton extends StatelessWidget {
                 icon: const Icon(Icons.folder),
                 onPressed: () async {
                   String dir = Platform.isAndroid
-                      ? '/storage/emulated/0/'
+                      ? '/storage/emulated/0'
                       : (await getApplicationDocumentsDirectory()).path;
 
                   String pathChosen = await FilesystemPicker.open(
@@ -190,7 +191,48 @@ class DirectoryPickerButton extends StatelessWidget {
                       ) ??
                       '';
 
-                  BlocProvider.of<DirectoryPickerCubit>(newContext)
+                  BlocProvider.of<ContentPickerCubit>(newContext)
+                      .valueChanged(pathChosen);
+                },
+                label: Text(label),
+                style: OutlinedButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20.0)))),
+            Text(state),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class FilePickerButton extends StatelessWidget {
+  const FilePickerButton({
+    Key? key,
+    required this.label,
+  }) : super(key: key);
+
+  final String label;
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<ContentPickerCubit, String>(
+      builder: (newContext, state) => Padding(
+        padding: padding,
+        child: Column(
+          children: [
+            OutlinedButton.icon(
+                icon: const Icon(Icons.folder),
+                onPressed: () async {
+                  String dir = Platform.isAndroid
+                      ? '/storage/emulated/0'
+                      : (await getApplicationDocumentsDirectory()).path;
+
+                  final filePicker = await FilePicker.platform.pickFiles();
+
+                  String pathChosen = filePicker?.files.single.path ?? '';
+
+                  BlocProvider.of<ContentPickerCubit>(newContext)
                       .valueChanged(pathChosen);
                 },
                 label: Text(label),

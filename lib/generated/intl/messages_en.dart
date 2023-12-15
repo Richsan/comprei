@@ -48,6 +48,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Invalid QR code!"),
         "invalidUsername":
             MessageLookupByLibrary.simpleMessage("Invalid user name"),
+        "loadingIndicatorLabel":
+            MessageLookupByLibrary.simpleMessage("Loading..."),
         "loginButton": MessageLookupByLibrary.simpleMessage("Login"),
         "merchantID": MessageLookupByLibrary.simpleMessage("Merchant ID"),
         "okButton": MessageLookupByLibrary.simpleMessage("OK"),

@@ -1,6 +1,7 @@
 {
   "@@locale": "en",
   "helloWorld": "Hello World!",
+  "loadingIndicatorLabel": "Loading...",
   "invalidCredentials": "Invalid Credentials!",
   "userName": "User Name",
   "password": "Password",

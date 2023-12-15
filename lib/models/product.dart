@@ -2,16 +2,18 @@ import 'package:equatable/equatable.dart';
 import 'package:uuid/uuid.dart';
 
 class Product extends Equatable {
-  const Product({
-    required this.cod,
-    required this.description,
+  Product({
+    UuidValue? id,
+    required this.unitMeasure,
+    required this.name,
     this.nickName,
     this.brand,
-  });
+  }) : id = id ?? const Uuid().v4obj();
 
-  final String cod;
-  final String description;
+  final UuidValue id;
   final String? nickName;
+  final String name;
+  final String unitMeasure;
   final Brand? brand;
 
   Product copyWith({
@@ -19,8 +21,9 @@ class Product extends Equatable {
     Brand? brand,
   }) {
     return Product(
-      cod: cod,
-      description: description,
+      id: id,
+      unitMeasure: unitMeasure,
+      name: name,
       nickName: nickName ?? this.nickName,
       brand: brand ?? this.brand,
     );
@@ -28,8 +31,9 @@ class Product extends Equatable {
 
   @override
   List<Object?> get props => [
-        cod,
-        description,
+        id,
+        name,
+        unitMeasure,
         nickName,
         brand,
       ];

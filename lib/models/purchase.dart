@@ -67,24 +67,33 @@ class Purchase extends Equatable {
 }
 
 class Merchant extends Equatable {
-  const Merchant({
-    required this.id,
+  Merchant({
+    UuidValue? id,
     required this.name,
+    required this.taxId,
     this.nickName,
-  });
+  }) : id = id ?? const Uuid().v4obj();
 
-  final String id;
+  final UuidValue id;
   final String name;
+  final String taxId;
   final String? nickName;
 
   @override
-  List<Object?> get props => [id, name, nickName];
+  List<Object?> get props => [
+        id,
+        name,
+        taxId,
+        nickName,
+      ];
 }
 
 class PurchaseItem extends Equatable {
   PurchaseItem({
     UuidValue? id,
     required this.value,
+    required this.cod,
+    required this.description,
     this.discount = 0,
     required this.product,
     this.unities = 1,
@@ -95,6 +104,8 @@ class PurchaseItem extends Equatable {
         id = id ?? const Uuid().v4obj();
 
   final Product product;
+  final String cod;
+  final String description;
   final int value;
   final int discount;
   final double unities;
@@ -112,7 +123,9 @@ class PurchaseItem extends Equatable {
   }) {
     return PurchaseItem(
       id: id,
+      cod: cod,
       product: product ?? this.product,
+      description: description,
       value: value ?? this.value,
       discount: discount ?? this.discount,
       unities: unities ?? this.unities,
@@ -124,7 +137,9 @@ class PurchaseItem extends Equatable {
 
   @override
   List<Object?> get props => [
+        id,
         product,
+        cod,
         value,
         discount,
         unities,

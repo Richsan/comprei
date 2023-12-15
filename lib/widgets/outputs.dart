@@ -1,6 +1,7 @@
 import 'package:comprei/widgets/inputs.dart';
 import 'package:comprei/widgets/styles.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class TextAlert extends StatelessWidget {
   const TextAlert({
@@ -243,11 +244,12 @@ class LoadingWidget extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.center,
-        children: const [
-          Text('Loading..'),
+        children: [
+          Text(AppLocalizations.of(context)!.loadingIndicatorLabel),
           Center(
             child: LinearProgressIndicator(
-              semanticsLabel: "loading...",
+              semanticsLabel:
+                  AppLocalizations.of(context)!.loadingIndicatorLabel,
             ),
           ),
         ],
