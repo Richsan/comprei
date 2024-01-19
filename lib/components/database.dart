@@ -8,7 +8,7 @@ const String categoryTableName = "category";
 const String categoryProductTableName = "category_product";
 const String purchaseItemTableName = "purchase_item";
 const String purchaseTableName = "purchase";
-const String productPurchaseItemTableName = "product_purchase_items";
+const String productPurchaseItemTableName = "product_purchase_item";
 
 Future<Database> getDatabase(
     String user, String databasePath, String password) async {

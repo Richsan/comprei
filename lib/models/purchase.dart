@@ -95,7 +95,7 @@ class PurchaseItem extends Equatable {
     required this.cod,
     required this.description,
     this.discount = 0,
-    required this.product,
+    this.product,
     this.unities = 1,
     this.unitMeasure = "UN",
   })  : assert(unities > 0),
@@ -103,7 +103,7 @@ class PurchaseItem extends Equatable {
         assert(value > 0),
         id = id ?? const Uuid().v4obj();
 
-  final Product product;
+  final Product? product;
   final String cod;
   final String description;
   final int value;

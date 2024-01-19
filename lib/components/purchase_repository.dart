@@ -15,7 +15,7 @@ class PurchaseRepository {
 
   Future<void> _updateProductFrequency(
       Transaction txn, PurchaseItem purchaseItem) async {
-    final product = purchaseItem.product;
+    final product = purchaseItem.product!;
     final purchases = (await txn.query(purchaseItemTableName,
             where: 'product_cod = ?', whereArgs: [product.id]))
         .map((p) => p['purchase_item_date_time'] as String)
@@ -36,7 +36,7 @@ class PurchaseRepository {
 
         for (var purchaseItem in purchase.items) {
           final product = purchaseItem.product;
-          final productBrand = product.brand;
+          final productBrand = product?.brand;
 
           if (productBrand != null) {
             await txn.insert(brandTableName, productBrand.toMapEntity(),
@@ -45,8 +45,10 @@ class PurchaseRepository {
 
           print("ID saving ${purchase.id.uuid}");
 
-          await txn.insert(productTableName, product.toMapEntity(),
-              conflictAlgorithm: ConflictAlgorithm.replace);
+          if (product != null) {
+            await txn.insert(productTableName, product.toMapEntity(),
+                conflictAlgorithm: ConflictAlgorithm.replace);
+          }
 
           await txn.insert(purchaseItemTableName, {
             ...purchaseItem.toMapEntity(),
@@ -83,49 +85,58 @@ class PurchaseRepository {
   }
 
   Future<Purchase> getPurchaseById(UuidValue purchaseId) async {
+    print(purchaseId);
     return await database.rawQuery(
-        'SELECT * FROM $purchaseItemTableName item'
-        ' JOIN $purchaseTableName purchase  ON purchase.purchase_id = item.purchase_id'
-        ' JOIN $productTableName product ON product.product_cod = item.product_cod'
-        ' JOIN $merchantTableName merchant ON merchant.merchant_id = item.merchant_id'
-        ' WHERE item.purchase_id = ?',
+        'SELECT purchase.*, item.*, merchant.*, product.* FROM $purchaseItemTableName item'
+        ' LEFT JOIN $purchaseTableName purchase  ON purchase.purchase_id = item.purchase_id'
+        ' LEFT JOIN $merchantTableName merchant ON merchant.merchant_id = purchase.merchant_id'
+        ' LEFT JOIN $productPurchaseItemTableName product_purchase_item ON item.purchase_item_cod = product_purchase_item.purchase_item_cod AND product_purchase_item.merchant_id = merchant.merchant_id'
+        ' LEFT JOIN $productTableName product ON product.product_id = product_purchase_item.product_id'
+        ' WHERE item.purchase_id = ? AND merchant.merchant_id is not null',
         [purchaseId.uuid]).then((rows) {
       final items = rows
           .map((itemRow) => PurchaseItem(
-                cod: itemRow['purchase_item_cod'] as String,
+                cod: itemRow['purchase_item_cod'].toString(),
                 value: itemRow['purchase_item_value'] as int,
-                description: itemRow['purchase_item_description'] as String,
-                product: Product(
-                    id: UuidValue(itemRow['product_id'] as String),
-                    unitMeasure: itemRow['product_unit_measure'] as String,
-                    name: itemRow['product_name'] as String,
-                    nickName: itemRow['product_nickname'] as String?,
-                    brand: itemRow['brand_id'] != null
-                        ? Brand(
-                            id: UuidValue(itemRow['brand_id'] as String),
-                            name: itemRow['brand_name'] as String,
-                            nickName: itemRow['brand_nickname'] as String?,
-                          )
-                        : null),
+                description: itemRow['purchase_item_description'].toString(),
+                product: itemRow['product_id'] != null
+                    ? Product(
+                        id: UuidValue(itemRow['product_id'].toString()),
+                        unitMeasure:
+                            itemRow['purchase_item_unit_measure'] as String,
+                        name: (itemRow['product_name'] ??
+                                itemRow['purchase_item_description'])
+                            .toString(),
+                        nickName: itemRow['product_nickname'] as String?,
+                        brand: itemRow['brand_id'] != null
+                            ? Brand(
+                                id: UuidValue(itemRow['brand_id'] as String),
+                                name: itemRow['brand_name'] as String,
+                                nickName: itemRow['brand_nickname'] as String?,
+                              )
+                            : null)
+                    : null,
                 unities: itemRow['purchase_item_unities'] as double,
                 unitMeasure: itemRow['purchase_item_unit_measure'] as String,
                 id: UuidValue(itemRow['purchase_item_id'] as String),
-                discount: itemRow['purchase_discount'] as int,
+                discount: itemRow['purchase_item_discount'] as int,
               ))
           .toList();
 
+      print(rows);
+
       return Purchase(
-        id: UuidValue(rows.first['purchase_id'] as String),
+        id: UuidValue(rows.first['purchase_id'].toString()),
         merchant: Merchant(
-          id: UuidValue(rows.first['merchant_id'] as String),
-          taxId: rows.first['merchant_tax_id'] as String,
+          id: UuidValue(rows.first['merchant_id'].toString()),
+          taxId: rows.first['merchant_tax_id'].toString(),
           name: rows.first['merchant_name'] as String,
           nickName: rows.first['merchant_nickname'] as String?,
         ),
         items: items,
         date: DateTime.parse(rows.first['purchase_date_time'] as String),
         discount: rows.first['purchase_discount'] as int,
-        invoice: rows.first['purchase_invoice'] as String,
+        invoice: rows.first['purchase_invoice'].toString(),
       );
     });
   }

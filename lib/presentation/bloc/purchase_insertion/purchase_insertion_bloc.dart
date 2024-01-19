@@ -17,8 +17,8 @@ class PurchaseInsertionBloc
       final purchaseItem = event.purchaseItem;
       final purchaseItems = purchase.items;
       final newPurchaseItems = purchaseItems
-          .map(
-              (e) => e.product.id == purchaseItem.product.id ? purchaseItem : e)
+          .map((e) =>
+              e.product?.id == purchaseItem.product?.id ? purchaseItem : e)
           .toList();
 
       emit(

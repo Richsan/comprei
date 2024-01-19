@@ -19,7 +19,7 @@ class PurchaseItemBloc extends Bloc<PurchaseItemEvent, PurchaseItemState> {
         return emit(
           EditingPurchaseItemState(
             purchaseItem: eventPurchaseItem.copyWith(
-              product: eventProduct.copyWith(
+              product: eventProduct?.copyWith(
                 nickName: event.productNickName,
               ),
               discount: event.productDiscount,

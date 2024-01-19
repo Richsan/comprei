@@ -30,8 +30,10 @@ class PurchaseItemScreen extends StatelessWidget {
   const PurchaseItemScreen({
     Key? key,
     required this.purchase,
+    this.editable = false,
   }) : super(key: key);
   final PurchaseItem purchase;
+  final bool editable;
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +41,7 @@ class PurchaseItemScreen extends StatelessWidget {
       providers: [
         BlocProvider<_NickNameInputField>(
           create: (context) => _NickNameInputField(
-            initialValue: purchase.product.nickName ?? '',
+            initialValue: purchase.product?.nickName ?? '',
           ),
         ),
         BlocProvider<_ValueInputField>(
@@ -83,7 +85,7 @@ class PurchaseItemScreen extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
 
     return FullScreenCard(
-      title: product.name,
+      title: product?.name ?? state.purchaseItem.description,
       buttonName: l10n.editButton,
       buttonOnPressed: () {
         final item = state.purchaseItem.copyWith(
@@ -94,7 +96,7 @@ class PurchaseItemScreen extends StatelessWidget {
                 .onlyNumbers()),
             unities: double.parse(
                 BlocProvider.of<_UnitiesInputField>(context).state),
-            product: product.copyWith(
+            product: product?.copyWith(
                 nickName: BlocProvider.of<_NickNameInputField>(context).state));
         BlocProvider.of<PurchaseItemBloc>(context)
             .add(UpdatePurchaseItem(purchaseItem: item));
@@ -137,12 +139,17 @@ class PurchaseItemScreen extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
 
     return FullScreenCard(
-      title: product.nickName ?? product.name,
-      buttonName: AppLocalizations.of(context)!.saveButton,
+      title:
+          product?.nickName ?? product?.name ?? state.purchaseItem.description,
+      buttonName: editable
+          ? AppLocalizations.of(context)!.saveButton
+          : AppLocalizations.of(context)!.okButton,
       buttonOnPressed: () => Navigator.of(context).pop(state.purchaseItem),
-      onEdit: () => BlocProvider.of<PurchaseItemBloc>(context).add(
-        EditPurchaseItem(purchaseItem: state.purchaseItem),
-      ),
+      onEdit: editable
+          ? () => BlocProvider.of<PurchaseItemBloc>(context).add(
+                EditPurchaseItem(purchaseItem: state.purchaseItem),
+              )
+          : () => Navigator.of(context).pop(),
       children: [
         SizedBox(
           height: 150.0,
@@ -154,11 +161,11 @@ class PurchaseItemScreen extends StatelessWidget {
         ),
         TextKeyValue(
           keyName: l10n.id,
-          value: product.id.uuid,
+          value: product?.id.uuid ?? '',
         ),
         TextKeyValue(
           keyName: l10n.brand,
-          value: product.brand?.name ?? '',
+          value: product?.brand?.name ?? '',
         ),
         TextKeyValue(
           keyName: l10n.valuePerUnit(purchase.unitMeasure),
