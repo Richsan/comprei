@@ -1,10 +1,9 @@
 import 'package:comprei/presentation/bloc/authentication/authentication_bloc.dart';
 import 'package:comprei/presentation/bloc/registration/registration_bloc.dart';
-import 'package:comprei/presentation/screens/home_screen.dart';
 import 'package:comprei/presentation/screens/insert_options_screen.dart';
 import 'package:comprei/presentation/screens/login_screen.dart';
+import 'package:comprei/presentation/screens/product_search_screen.dart';
 import 'package:comprei/presentation/screens/registration_screen.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -29,7 +28,7 @@ class App extends StatelessWidget {
               BlocBuilder<AuthenticationBloc, AuthenticationState>(
                 builder: (context, state) {
                   if (state is Logged) {
-                    return const HomeScreen();
+                    return const ProductSearchScreen();
                   }
 
                   //TODO: Register screen

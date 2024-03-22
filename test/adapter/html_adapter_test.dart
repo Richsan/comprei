@@ -106,9 +106,9 @@ void main() {
                               item.unitMeasure == element.unitMeasure &&
                               item.cod == element.cod &&
                               item.value == element.value &&
-                              item.product.name == element.product.name &&
-                              item.product.unitMeasure ==
-                                  element.product.unitMeasure)
+                              item.product?.name == element.product?.name &&
+                              item.product?.unitMeasure ==
+                                  element.product?.unitMeasure)
                           .isNotEmpty,
                     )
                     .isNotEmpty,

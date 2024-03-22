@@ -2,29 +2,12 @@ import 'package:comprei/adapters/input_masks.dart';
 import 'package:comprei/adapters/number.dart';
 import 'package:comprei/adapters/string.dart';
 import 'package:comprei/models/purchase.dart';
-import 'package:comprei/presentation/bloc/inputs/text_field.dart';
 import 'package:comprei/presentation/bloc/purchase_item/purchase_item_bloc.dart';
 import 'package:comprei/widgets/inputs.dart';
 import 'package:comprei/widgets/outputs.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-
-class _NickNameInputField extends Cubit<String> with ITextFieldCubit {
-  _NickNameInputField({String initialValue = ''}) : super(initialValue);
-}
-
-class _ValueInputField extends Cubit<String> with ITextFieldCubit {
-  _ValueInputField({String initialValue = ''}) : super(initialValue);
-}
-
-class _DiscountInputField extends Cubit<String> with ITextFieldCubit {
-  _DiscountInputField({String initialValue = ''}) : super(initialValue);
-}
-
-class _UnitiesInputField extends Cubit<String> with ITextFieldCubit {
-  _UnitiesInputField({String initialValue = ''}) : super(initialValue);
-}
 
 class PurchaseItemScreen extends StatelessWidget {
   const PurchaseItemScreen({
@@ -39,26 +22,6 @@ class PurchaseItemScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider<_NickNameInputField>(
-          create: (context) => _NickNameInputField(
-            initialValue: purchase.product?.nickName ?? '',
-          ),
-        ),
-        BlocProvider<_ValueInputField>(
-          create: (context) => _ValueInputField(
-            initialValue: purchase.value.asCurrency(),
-          ),
-        ),
-        BlocProvider<_DiscountInputField>(
-          create: (context) => _DiscountInputField(
-            initialValue: purchase.discount.asCurrency(),
-          ),
-        ),
-        BlocProvider<_UnitiesInputField>(
-          create: (context) => _UnitiesInputField(
-            initialValue: purchase.unities.toString(),
-          ),
-        ),
         BlocProvider<PurchaseItemBloc>(
             create: (context) => PurchaseItemBloc(purchase)),
       ],
@@ -72,64 +35,44 @@ class PurchaseItemScreen extends StatelessWidget {
   }
 
   Widget buildEditScreen(BuildContext context, EditingPurchaseItemState state) {
-    final product = state.purchaseItem.product;
-    final ITextFieldCubit nickNameFieldBloc =
-        BlocProvider.of<_NickNameInputField>(context);
-    final ITextFieldCubit valueFieldBloc =
-        BlocProvider.of<_ValueInputField>(context);
-    final ITextFieldCubit discountFieldBloc =
-        BlocProvider.of<_DiscountInputField>(context);
-    final ITextFieldCubit unitiesFieldBloc =
-        BlocProvider.of<_UnitiesInputField>(context);
-
     final l10n = AppLocalizations.of(context)!;
+
+    final product = state.purchaseItem.product;
+    final TextInputField nicknameField = TextInputField(
+      mask: masks["alphabetic"],
+      labelText: l10n.productNicknameHint,
+    );
+    final TextInputField valueField = TextInputField(
+      labelText: l10n.discount,
+      mask: masks["currency"],
+    );
+
+    final TextInputField discountField = TextInputField(
+      labelText: l10n.discount,
+      mask: masks["currency"],
+    );
+    final TextInputField unitiesField = TextInputField(
+      labelText: l10n.unities,
+      mask: masks["decimal"],
+    );
 
     return FullScreenCard(
       title: product?.name ?? state.purchaseItem.description,
       buttonName: l10n.editButton,
       buttonOnPressed: () {
         final item = state.purchaseItem.copyWith(
-            value: int.parse(
-                BlocProvider.of<_ValueInputField>(context).state.onlyNumbers()),
-            discount: int.parse(BlocProvider.of<_DiscountInputField>(context)
-                .state
-                .onlyNumbers()),
-            unities: double.parse(
-                BlocProvider.of<_UnitiesInputField>(context).state),
-            product: product?.copyWith(
-                nickName: BlocProvider.of<_NickNameInputField>(context).state));
+            value: int.parse(valueField.currentValue.onlyNumbers()),
+            discount: int.parse(discountField.currentValue.onlyNumbers()),
+            unities: double.parse(unitiesField.currentValue),
+            product: product?.copyWith(nickName: nicknameField.currentValue));
         BlocProvider.of<PurchaseItemBloc>(context)
             .add(UpdatePurchaseItem(purchaseItem: item));
       },
       children: [
-        BlocProvider.value(
-          value: nickNameFieldBloc,
-          child: TextInputField(
-            mask: masks["alphabetic"],
-            labelText: l10n.productNicknameHint,
-          ),
-        ),
-        BlocProvider.value(
-          value: valueFieldBloc,
-          child: TextInputField(
-            labelText: l10n.value,
-            mask: masks["currency"],
-          ),
-        ),
-        BlocProvider.value(
-          value: discountFieldBloc,
-          child: TextInputField(
-            labelText: l10n.discount,
-            mask: masks["currency"],
-          ),
-        ),
-        BlocProvider.value(
-          value: unitiesFieldBloc,
-          child: TextInputField(
-            labelText: l10n.unities,
-            mask: masks["decimal"],
-          ),
-        ),
+        nicknameField,
+        valueField,
+        discountField,
+        unitiesField,
       ],
     );
   }

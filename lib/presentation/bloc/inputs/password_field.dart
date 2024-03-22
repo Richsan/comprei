@@ -1,4 +1,3 @@
-import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 
 class PasswordFieldParams extends Equatable {
@@ -20,22 +19,8 @@ class PasswordFieldParams extends Equatable {
       );
 
   @override
-  List<Object> get props =>
-      [
+  List<Object> get props => [
         obscureText,
         value,
       ];
-}
-
-class PasswordFieldCubit extends Cubit<PasswordFieldParams> {
-  PasswordFieldCubit() : super(const PasswordFieldParams());
-
-  void toggleVisibility() =>
-      emit(state.copyWith(
-        obscureText: !state.obscureText,
-      ));
-
-  void valueChanged(String newValue) =>
-      emit(state.copyWith(value: newValue,
-      ));
 }
